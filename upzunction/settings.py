@@ -19,17 +19,13 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'a-default-secret-key-for-local-dev')
 # DEBUG is automatically turned off when deployed to Render.
 DEBUG = 'RENDER' not in os.environ
 
-# --- THIS IS THE CORRECTED SECTION ---
-# This automatically configures your domain name on Render AND adds your custom domain.
-ALLOWED_HOSTS = []
-
-# This uses the correct environment variable name provided by Render.
-RENDER_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_HOSTNAME)
-
-# Also add your custom domain for when you connect it later.
-ALLOWED_HOSTS.extend(['upzunction.in', 'www.upzunction.in'])
+# --- THIS IS THE FINAL, ROBUST FIX ---
+# We are now explicitly allowing Render's domain and your custom domain.
+ALLOWED_HOSTS = [
+    '.onrender.com',        # Allows your deployed site at upzunction.onrender.com
+    'upzunction.in',        # Allows your custom domain
+    'www.upzunction.in',    # Allows your custom domain with www
+]
 # --- END OF CORRECTION ---
 
 
