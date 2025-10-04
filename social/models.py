@@ -34,7 +34,7 @@ class Post(models.Model):
         # Automatically set the expiration date on creation
         if not self.id:
             # THIS LINE IS NOW CHANGED TO 7 DAYS
-            self.expires_at = timezone.now() + datetime.timedelta(minutes=2)
+            self.expires_at = timezone.now() + datetime.timedelta(days=7)
         super(Post, self).save(*args, **kwargs)
 
     def __str__(self):
