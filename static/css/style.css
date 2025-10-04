@@ -1,0 +1,58 @@
+/* static/css/style.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-card {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px; /* Reduced from 20px */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%; /* Ensures cards in the same row are the same height */
+}
+
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* --- UPDATED FOR SMALLER SIZE --- */
+.post-title {
+    font-size: 18px; /* Reduced from 24px */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px; /* Reduced from 10px */
+}
+
+/* --- UPDATED FOR SMALLER SIZE --- */
+.post-description {
+    font-size: 15px; /* Reduced from 16px */
+    color: #555;
+    line-height: 22px; /* Reduced from 24px */
+    margin-bottom: 15px;
+}
+
+/* --- UPDATED FOR SMALLER SIZE --- */
+.post-meta {
+    font-size: 13px; /* Reduced from 14px */
+    color: #777;
+}
+
+.post-meta .badge {
+    font-size: 13px;
+}
+
+.contact-button {
+    margin-top: 15px;
+    padding: 5px 10px;
+    font-size: 13px;
+    font-weight: bold;
+   
+}
