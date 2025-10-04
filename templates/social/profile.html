@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card" data-aos="fade-up">
+            <div class="card-header">
+                <h2>{{ user.username }}'s Profile</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Account Info</legend>
+                        {{ u_form.as_p }}
+                    </fieldset>
+                    <fieldset class="form-group mt-4">
+                        <legend class="border-bottom mb-4">Contact Info</legend>
+                        {{ p_form.as_p }}
+                    </fieldset>
+                    <div class="form-group mt-4">
+                        <button class="btn btn-primary" type="submit">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

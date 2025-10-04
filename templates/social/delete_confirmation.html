@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Deletion{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="card border-danger" data-aos="fade-up">
+            <div class="card-header bg-danger text-white">
+                <h2 class="h4 mb-0">Are you sure?</h2>
+            </div>
+            <div class="card-body">
+                <p class="lead">You are about to permanently delete the post:</p>
+                <h4 class="my-3">"{{ post.title }}"</h4>
+                <p>This action cannot be undone.</p>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-lg">Yes, Delete It</button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">No, Go Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

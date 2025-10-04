@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+    {% block title %}Verify Email (Step 2){% endblock %}
+    {% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header"><h3>Register - Step 2 of 2</h3></div>
+                <div class="card-body">
+                    <p>An OTP has been sent to <strong>{{ email }}</strong>. Please enter it below and set your password.</p>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="otp" class="form-label">6-Digit OTP</label>
+                            <input type="text" class="form-control" name="otp" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password2" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" name="password2" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Complete Registration</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    ```
+4.  Finally, **update the link** in `templates/registration/login.html` to point to the new starting page.
+    ```html
+    <!-- in login.html -->
+    <p>Don't have an account? <a href="{% url 'register_request' %}">Sign Up</a></p>

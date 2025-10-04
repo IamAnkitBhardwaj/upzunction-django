@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Social Feed - upzunction{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4" data-aos="fade-down">
+    <h1>Lucknow Community Requirements</h1>
+    <p class="lead">Find what you need, right here, right now.</p>
+</div>
+
+<div class="card mb-4" data-aos="fade-up">
+    <div class="card-body">
+        <form method="GET" action="{% url 'home' %}">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-10">
+                    <label for="location" class="form-label">Filter by Specific Location</label>
+                    <select class="form-select" id="location" name="location">
+                        <option value="">Show All Lucknow Posts</option>
+                        {% for loc in locations %}
+                            <option value="{{ loc.id }}" {% if current_location_id == loc.id %}selected{% endif %}>
+                                {{ loc.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary mt-4">Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="row g-4">
+    {% for post in posts %}
+    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+        <div class="post-card w-100 d-flex flex-column" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-body flex-grow-1">
+                <h3 class="post-title">{{ post.title }}</h3>
+                <p class="post-description">{{ post.description }}</p>
+            </div>
+
+            <div class="card-footer bg-transparent border-top-0 pt-0">
+                <div class="post-meta d-flex justify-content-between align-items-center mb-3">
+                    <span>
+                        <i class="fas fa-map-marker-alt"></i>
+                        {% if post.location %}
+                        <span class="badge bg-info text-dark">{{ post.location.name }}</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Lucknow</span>
+                        {% endif %}
+                    </span>
+
+                    <span>
+                        <i class="fas fa-clock"></i>
+                        {{ post.created_at|timesince }} ago
+                    </span>
+                </div>
+
+                <div class="text-end">
+                    {% if post.whatsapp_number %}
+                    <a href="https://wa.me/91{{ post.whatsapp_number }}" target="_blank"
+                        class="btn btn-success btn-sm">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    {% endif %}
+
+                    <button type="button" class="btn btn-primary btn-sm ms-1" data-bs-toggle="modal"
+                        data-bs-target="#messageModal-{{ post.id }}">
+                        <i class="fas fa-paper-plane"></i> Message
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="messageModal-{{ post.id }}" tabindex="-1"
+        aria-labelledby="messageModalLabel-{{ post.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel-{{ post.id }}">Send a message about
+                        "{{ post.title }}"
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'send_message' post.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="message-text-{{ post.id }}" class="col-form-label">Your Message:</label>
+                            <textarea class="form-control" id="message-text-{{ post.id }}" name="message_body" rows="4"
+                                required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sender-phone-{{ post.id }}" class="col-form-label">Your Phone Number
+                                (Optional):</label>
+                            <input type="text" class="form-control" id="sender-phone-{{ post.id }}"
+                                name="sender_phone" placeholder="So they can contact you directly">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <p>You must be <a href="{% url 'login' %}?next={{ request.path }}">logged in</a> to send a
+                        message.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center" role="alert" data-aos="fade-in">
+            No requirements posted for this location yet. Be the first!
+        </div>
+    </div>
+    {% endfor %}
+</div> {% endblock %}

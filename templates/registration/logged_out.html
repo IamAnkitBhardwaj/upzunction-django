@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Logged Out - upzunction{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="card" data-aos="fade-up">
+            <div class="card-body">
+                <h2 class="card-title">You have been successfully logged out.</h2>
+                <p class="card-text">Thank you for visiting upzunction.</p>
+                <a href="{% url 'login' %}" class="btn btn-primary mt-3">Log In Again</a>
+                <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

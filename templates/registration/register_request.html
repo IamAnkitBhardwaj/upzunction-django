@@ -1,0 +1,26 @@
+ {% extends 'base.html' %}
+    {% block title %}Register (Step 1){% endblock %}
+    {% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header"><h3>Register - Step 1 of 2</h3></div>
+                <div class="card-body">
+                    <p>Please enter your desired username and a valid email to receive a verification OTP.</p>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Verification OTP</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
