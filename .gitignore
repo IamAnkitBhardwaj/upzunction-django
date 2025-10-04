@@ -12,7 +12,8 @@ Environment
 venv/
 
 Static files
-/static
+This is the folder created by collectstatic, it should be ignored.
+staticfiles/
 
 Other
 .DS_Store
