@@ -19,17 +19,18 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'a-default-secret-key-for-local-dev')
 # DEBUG is automatically turned off when deployed to Render.
 DEBUG = 'RENDER' not in os.environ
 
-# --- THIS IS THE UPDATED SECTION ---
+# --- THIS IS THE CORRECTED SECTION ---
 # This automatically configures your domain name on Render AND adds your custom domain.
 ALLOWED_HOSTS = []
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_URL')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+# This uses the correct environment variable name provided by Render.
+RENDER_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_HOSTNAME)
 
-# Add your custom domain and its 'www' version
+# Also add your custom domain for when you connect it later.
 ALLOWED_HOSTS.extend(['upzunction.in', 'www.upzunction.in'])
-# --- END OF UPDATE ---
+# --- END OF CORRECTION ---
 
 
 # Application definition
@@ -77,7 +78,6 @@ WSGI_APPLICATION = 'upzunction.wsgi.application'
 
 
 # --- DATABASE CONFIGURATION FOR RENDER (POSTGRESQL) ---
-# This is the crucial change. It reads the database URL from Render's environment.
 DATABASES = {
     'default': dj_database_url.config(
         # Use sqlite locally if no DATABASE_URL is set
@@ -105,10 +105,8 @@ USE_TZ = True
 
 # --- STATIC FILES CONFIGURATION FOR RENDER ---
 STATIC_URL = 'static/'
-# This tells Django where to collect all static files for deployment.
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# Use Whitenoise's efficient storage backend
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
