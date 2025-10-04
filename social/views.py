@@ -4,7 +4,9 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
-
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+import os
 # Models and Forms
 from .models import Post, Location, Message, Profile 
 from .forms import PostForm, UserRegisterForm, UserUpdateForm, ProfileUpdateForm
@@ -316,3 +318,29 @@ def terms_of_service_view(request):
 def privacy_policy_view(request):
     return render(request, 'social/privacy_policy.html')
 
+def create_superuser_temp_view(request):
+    # 1. Get the secret key from the URL
+    secret_key = request.GET.get('key')
+    # 2. Get the expected key from your Render environment variables
+    expected_key = os.getenv('TEMP_ADMIN_KEY')
+
+    # 3. If the keys don't match, block access
+    if not secret_key or secret_key != expected_key:
+        return HttpResponse("Unauthorized: Invalid or missing key.", status=401)
+
+    # 4. Get the desired credentials from your Render environment variables
+    username = os.getenv('TEMP_ADMIN_USER')
+    email = os.getenv('TEMP_ADMIN_EMAIL')
+    password = os.getenv('TEMP_ADMIN_PASS')
+
+    # 5. Check if all credentials are set
+    if not all([username, email, password]):
+        return HttpResponse("Error: One or more temporary admin environment variables are not set.", status=500)
+
+    # 6. Create the superuser if they don't already exist
+    if not User.objects.filter(username=username).exists():
+        User.objects.create_superuser(username=username, email=email, password=password)
+        # 7. Show a success message
+        return HttpResponse(f"Superuser '{username}' created successfully. You can now log in at /admin/. PLEASE REMOVE THIS URL AND VIEW FROM YOUR CODE IMMEDIATELY.")
+    else:
+        return HttpResponse(f"Superuser '{username}' already exists.")
