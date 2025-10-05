@@ -1,3 +1,4 @@
+
 from pathlib import Path
 import os
 import dj_database_url
@@ -29,7 +30,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    # Add Whitenoise to INSTALLED_APPS
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'social',
@@ -37,7 +37,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # Whitenoise Middleware MUST be placed right after SecurityMiddleware.
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,7 +70,6 @@ WSGI_APPLICATION = 'upzunction.wsgi.application'
 # --- DATABASE CONFIGURATION FOR RENDER (POSTGRESQL) ---
 DATABASES = {
     'default': dj_database_url.config(
-        # Fallback to sqlite for local development
         default='sqlite:///db.sqlite3',
         conn_max_age=600
     )
@@ -96,11 +94,8 @@ USE_TZ = True
 
 # --- STATIC FILES CONFIGURATION FOR RENDER ---
 STATIC_URL = 'static/'
-# This tells Django's `collectstatic` command to gather all static files into this directory.
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# This is where Django will look for static files in development.
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# This storage engine allows Whitenoise to serve compressed files and handle caching.
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
@@ -108,13 +103,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- PRODUCTION EMAIL SETTINGS ---
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
+# --- PRODUCTION EMAIL SETTINGS (SENDGRID) ---
+# This is the new, correct backend for SendGrid.
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+# This reads your new API key from the environment variables.
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+# This is the email your users will see the OTP come from.
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER') # We can reuse the EMAIL_USER variable
 
 
 # --- AUTHENTICATION SETTINGS ---
