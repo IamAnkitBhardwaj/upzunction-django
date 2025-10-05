@@ -4,17 +4,14 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
-from django.http import HttpResponse
-from django.contrib.auth.models import User
-import os
+from django.conf import settings # Import the settings module
+
 # Models and Forms
-from .models import Post, Location, Message, Profile 
+from .models import Post, Location, Message, Profile
 from .forms import PostForm, UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
-# --- THIS IS THE CORRECTED IMPORT ---
-# 'PasswordInput' is a general form widget, not an auth-specific one.
-from django.forms import PasswordInput 
-# --- END OF CORRECTION ---
+# Corrected Import for form widgets
+from django.forms import PasswordInput
 
 # Authentication and Password Validation/Reset
 from django.contrib.auth.models import User
@@ -45,7 +42,7 @@ def home_view(request):
 
     posts = posts.order_by('-created_at')
     locations = Location.objects.filter(city="Lucknow").order_by('name')
-    
+
     context = {
         'posts': posts,
         'locations': locations,
@@ -55,6 +52,7 @@ def home_view(request):
 
 
 def register_request_view(request):
+    """Handles Step 1 of registration: getting username/email and sending OTP."""
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -65,7 +63,7 @@ def register_request_view(request):
             messages.error(request, 'An account with this email already exists.')
         else:
             otp = random.randint(100000, 999999)
-            
+
             request.session['reg_username'] = username
             request.session['reg_email'] = email
             request.session['reg_otp'] = otp
@@ -74,7 +72,7 @@ def register_request_view(request):
             send_mail(
                 'Verify your email for upzunction',
                 f'Your verification OTP is: {otp}\nIt will expire in 10 minutes.',
-                'noreply@upzunction.com',
+                settings.DEFAULT_FROM_EMAIL,  # <-- THE FIX: Use the verified email
                 [email],
                 fail_silently=False,
             )
@@ -85,6 +83,7 @@ def register_request_view(request):
 
 
 def register_verify_view(request):
+    """Handles Step 2 of registration: verifying OTP and setting password."""
     username = request.session.get('reg_username')
     email = request.session.get('reg_email')
     session_otp = request.session.get('reg_otp')
@@ -102,7 +101,7 @@ def register_verify_view(request):
         if datetime.fromisoformat(otp_expires_at) < datetime.now():
             messages.error(request, 'OTP has expired. Please request a new one.')
             return redirect('register_request')
-        
+
         if not (entered_otp and session_otp and int(entered_otp) == session_otp):
             messages.error(request, 'Invalid OTP. Please try again.')
         elif password != password2:
@@ -116,7 +115,7 @@ def register_verify_view(request):
                 for key in list(request.session.keys()):
                     if key.startswith('reg_'):
                         del request.session[key]
-                
+
                 messages.success(request, 'Registration successful! You are now logged in.')
                 return redirect('home')
 
@@ -126,33 +125,35 @@ def register_verify_view(request):
     return render(request, 'registration/register_verify.html', {'email': email})
 
 
-@login_required 
+@login_required
 def create_post_view(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user 
+            post.author = request.user
             post.save()
             messages.success(request, f"Your post '{post.title}' has been created!")
             return redirect('home')
     else:
         form = PostForm()
-    
+
     return render(request, 'social/create_post.html', {'form': form})
+
 
 @login_required
 def dashboard_view(request):
     user_posts = Post.objects.filter(author=request.user).order_by('-created_at')
     received_messages = Message.objects.filter(recipient=request.user).order_by('-sent_at')
     sent_messages = Message.objects.filter(sender=request.user).order_by('-sent_at')
-    
+
     context = {
         'user_posts': user_posts,
         'received_messages': received_messages,
         'sent_messages': sent_messages,
     }
     return render(request, 'social/dashboard.html', context)
+
 
 @login_required
 def deactivate_post_view(request, post_id):
@@ -162,6 +163,7 @@ def deactivate_post_view(request, post_id):
         post.save()
         return redirect('dashboard')
     return redirect('dashboard')
+
 
 @login_required
 def send_message_view(request, post_id):
@@ -185,6 +187,7 @@ def send_message_view(request, post_id):
             messages.success(request, "Your message has been sent successfully!")
     return redirect('home')
 
+
 @login_required
 def approve_message_view(request, message_id):
     message = get_object_or_404(Message, id=message_id, recipient=request.user)
@@ -197,6 +200,7 @@ def approve_message_view(request, message_id):
         messages.success(request, f"You have approved the offer from {message.sender.username}!")
         return redirect('dashboard')
     return redirect('dashboard')
+
 
 @login_required
 def edit_post_view(request, post_id):
@@ -211,6 +215,7 @@ def edit_post_view(request, post_id):
         form = PostForm(instance=post)
     return render(request, 'social/edit_post.html', {'form': form})
 
+
 @login_required
 def delete_post_view(request, post_id):
     post = get_object_or_404(Post, id=post_id, author=request.user)
@@ -221,10 +226,11 @@ def delete_post_view(request, post_id):
         return redirect('dashboard')
     return render(request, 'social/delete_confirmation.html', {'post': post})
 
+
 @login_required
 def profile_view(request):
     Profile.objects.get_or_create(user=request.user)
-    
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
@@ -243,6 +249,7 @@ def profile_view(request):
     }
     return render(request, 'social/profile.html', context)
 
+
 def password_reset_request_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -255,7 +262,7 @@ def password_reset_request_view(request):
             send_mail(
                 'Your Password Reset OTP for upzunction',
                 f'Your OTP is: {otp}\nIt will expire in 5 minutes.',
-                'noreply@upzunction.com',
+                settings.DEFAULT_FROM_EMAIL,  # <-- THE FIX: Use the verified email
                 [email],
                 fail_silently=False,
             )
@@ -292,7 +299,7 @@ def password_reset_new_password_view(request):
     if not request.session.get('otp_verified'):
         messages.error(request, 'Please verify your OTP first.')
         return redirect('password_reset_otp')
-    
+
     email = request.session.get('reset_email')
     user = User.objects.get(email=email)
 
@@ -308,12 +315,13 @@ def password_reset_new_password_view(request):
             return redirect('login')
     else:
         form = SetPasswordForm(user)
-    
+
     return render(request, 'registration/password_reset_new.html', {'form': form})
 
 
 def terms_of_service_view(request):
     return render(request, 'social/terms_of_service.html')
+
 
 def privacy_policy_view(request):
     return render(request, 'social/privacy_policy.html')
