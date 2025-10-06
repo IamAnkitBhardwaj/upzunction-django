@@ -1,3 +1,6 @@
+"""
+Django settings for upzunction project, configured for production deployment on Render.
+"""
 
 from pathlib import Path
 import os
@@ -16,11 +19,18 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'a-default-secret-key-for-local-dev-only')
 # DEBUG is automatically turned OFF on Render, and ON locally.
 DEBUG = 'RENDER' not in os.environ
 
-# This automatically configures your domain name for Render.
+# --- ALLOWED HOSTS CONFIGURATION ---
+# This section correctly handles both Render's domain and your custom domain.
 ALLOWED_HOSTS = []
+
+# Automatically add Render's hostname
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Manually add your custom domains
+ALLOWED_HOSTS.append('upzunction.in')
+ALLOWED_HOSTS.append('www.upzunction.in')
 
 
 # Application definition
@@ -104,12 +114,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # --- PRODUCTION EMAIL SETTINGS (SENDGRID) ---
-# This is the new, correct backend for SendGrid.
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-# This reads your new API key from the environment variables.
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-# This is the email your users will see the OTP come from.
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER') # We can reuse the EMAIL_USER variable
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
 
 
 # --- AUTHENTICATION SETTINGS ---
@@ -117,3 +124,8 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 AUTHENTICATION_BACKENDS = ['social.backends.EmailBackend']
+
+
+
+
+
