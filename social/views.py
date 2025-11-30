@@ -326,30 +326,3 @@ def terms_of_service_view(request):
 def privacy_policy_view(request):
     return render(request, 'social/privacy_policy.html')
 
-# --- TEMPORARY ADMIN CREATION VIEW ---
-from django.http import HttpResponse
-from django.contrib.auth.models import User
-import os
-
-def create_superuser_temp_view(request):
-    # 1. Security Check
-    secret_key = request.GET.get('key')
-    expected_key = os.getenv('TEMP_ADMIN_KEY')
-    
-    if not secret_key or secret_key != expected_key:
-        return HttpResponse("Unauthorized: Wrong key.", status=401)
-
-    # 2. Admin Details
-    username = "upzunction_admin"
-    email = "upzunction@gmail.com" 
-    password = "ankitupzunction25"  # <--- SET YOUR DESIRED PASSWORD HERE
-
-    # 3. Create User
-    if not User.objects.filter(username=username).exists():
-        try:
-            User.objects.create_superuser(username=username, email=email, password=password)
-            return HttpResponse(f"SUCCESS! Superuser '{username}' created. <br>Login at /admin/ <br><b>DELETE THIS CODE NOW.</b>")
-        except Exception as e:
-            return HttpResponse(f"Error creating user: {e}")
-    else:
-        return HttpResponse(f"Superuser '{username}' already exists.")
