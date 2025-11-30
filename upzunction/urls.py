@@ -9,7 +9,7 @@ from django.urls import path, include
 from social import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('create-admin-secret-page/', views.create_superuser_temp_view),
+    
     # This correctly imports all the pre-built auth URLs like login/logout.
     path('accounts/', include('django.contrib.auth.urls')),
    
