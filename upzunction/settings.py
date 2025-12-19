@@ -20,7 +20,6 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'a-default-secret-key-for-local-dev-only')
 DEBUG = 'RENDER' not in os.environ
 
 # --- ALLOWED HOSTS CONFIGURATION ---
-# This section correctly handles both Render's domain and your custom domain.
 ALLOWED_HOSTS = []
 
 # Automatically add Render's hostname
@@ -113,16 +112,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- PRODUCTION EMAIL SETTINGS (SWITCHED BACK TO GMAIL) ---
-# We are using standard SMTP backend for Gmail
+# --- PRODUCTION EMAIL SETTINGS (GMAIL) ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
-# Note: We are using EMAIL_PASS here (App Password), NOT SENDGRID_API_KEY
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
+EMAIL_TIMEOUT = 30  # Add timeout to prevent immediate crashes
 
 
 # --- AUTHENTICATION SETTINGS ---
