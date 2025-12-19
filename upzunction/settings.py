@@ -113,9 +113,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- PRODUCTION EMAIL SETTINGS (SENDGRID) ---
-EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+# --- PRODUCTION EMAIL SETTINGS (SWITCHED BACK TO GMAIL) ---
+# We are using standard SMTP backend for Gmail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+# Note: We are using EMAIL_PASS here (App Password), NOT SENDGRID_API_KEY
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
 
 
@@ -124,8 +130,3 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 AUTHENTICATION_BACKENDS = ['social.backends.EmailBackend']
-
-
-
-
-
