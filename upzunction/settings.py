@@ -112,15 +112,17 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- PRODUCTION EMAIL SETTINGS (GMAIL) ---
+# --- PRODUCTION EMAIL SETTINGS (GMAIL - SSL MODE) ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# Switched to Port 465 and SSL for potentially better connectivity
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False  # TLS must be False when SSL is True
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
-EMAIL_TIMEOUT = 30  # Add timeout to prevent immediate crashes
+EMAIL_TIMEOUT = 30
 
 
 # --- AUTHENTICATION SETTINGS ---
