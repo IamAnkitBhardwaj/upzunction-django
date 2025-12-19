@@ -112,16 +112,21 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- PRODUCTION EMAIL SETTINGS (GMAIL - SSL MODE) ---
+# --- PRODUCTION EMAIL SETTINGS (BREVO SMTP) ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-# Switched to Port 465 and SSL for potentially better connectivity
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-EMAIL_USE_TLS = False  # TLS must be False when SSL is True
-EMAIL_HOST_USER = os.getenv('EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# 1. The email you use to LOGIN to Brevo (e.g., your personal email)
+EMAIL_HOST_USER = os.getenv('BREVO_LOGIN_EMAIL')
+
+# 2. The SMTP Key from Brevo
+EMAIL_HOST_PASSWORD = os.getenv('BREVO_SMTP_KEY')
+
+# 3. The email the user SEES the OTP come from (upzunction@gmail.com)
+DEFAULT_FROM_EMAIL = os.getenv('SENDER_EMAIL', 'upzunction@gmail.com')
+
 EMAIL_TIMEOUT = 30
 
 
@@ -130,3 +135,5 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 AUTHENTICATION_BACKENDS = ['social.backends.EmailBackend']
+
+
