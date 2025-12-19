@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
 from django.conf import settings # Import the settings module
+from django.http import HttpResponse
+import os
 
 # Models and Forms
 from .models import Post, Location, Message, Profile
@@ -326,3 +328,26 @@ def terms_of_service_view(request):
 def privacy_policy_view(request):
     return render(request, 'social/privacy_policy.html')
 
+
+
+# ADD THIS TEMPORARY VIEW
+def create_superuser_temp_view(request):
+    secret_key = request.GET.get('key')
+    expected_key = os.getenv('TEMP_ADMIN_KEY')
+    
+    if not secret_key or secret_key != expected_key:
+        return HttpResponse("Unauthorized: Wrong key.", status=401)
+
+    # CHANGE THESE DETAILS
+    username = "upzunctionadmin"
+    email = "upzunction@gmail.com" 
+    password = "Ankit@upzunction2526withsupabase" 
+
+    if not User.objects.filter(username=username).exists():
+        try:
+            User.objects.create_superuser(username=username, email=email, password=password)
+            return HttpResponse(f"SUCCESS! Created superuser '{username}'. <br>Login at /admin/")
+        except Exception as e:
+            return HttpResponse(f"Error: {e}")
+    else:
+        return HttpResponse(f"Superuser '{username}' already exists.")
