@@ -112,18 +112,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- PRODUCTION EMAIL SETTINGS (BREVO SMTP - PORT 2525) ---
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-relay.brevo.com'
-EMAIL_PORT = 2525  # Changed from 587 to 2525 to bypass blocks
-EMAIL_USE_TLS = True
+# --- PRODUCTION EMAIL SETTINGS (SENDGRID) ---
+# Switching back to SendGrid API (HTTP) to avoid SMTP blocking issues.
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
-# Using standard variable names as configured in Render
-EMAIL_HOST_USER = os.getenv('BREVO_LOGIN_EMAIL') 
-EMAIL_HOST_PASSWORD = os.getenv('BREVO_SMTP_KEY')
-DEFAULT_FROM_EMAIL = os.getenv('SENDER_EMAIL')
+# Use SENDER_EMAIL if set, otherwise fallback to EMAIL_USER or hardcoded string
+DEFAULT_FROM_EMAIL = os.getenv('SENDER_EMAIL', 'upzunction@gmail.com')
 
-EMAIL_TIMEOUT = 30
+# Toggle sandbox mode to False for real emails
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 
 # --- AUTHENTICATION SETTINGS ---
