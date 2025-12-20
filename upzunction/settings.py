@@ -53,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # --- VISITOR TRACKING MIDDLEWARE (ADDED HERE) ---
+    'social.middleware.VisitorTrackingMiddleware',
 ]
 
 ROOT_URLCONF = 'upzunction.urls'
