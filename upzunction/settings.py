@@ -112,17 +112,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- PRODUCTION EMAIL SETTINGS (BREVO SMTP - PORT 2525) ---
+# --- PRODUCTION EMAIL SETTINGS (BREVO SMTP) ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-relay.brevo.com'
-# Port 2525 is often more reliable on cloud hosting than 587
-EMAIL_PORT = 2525
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-# We use specific variable names to avoid confusion
-EMAIL_HOST_USER = os.getenv('BREVO_LOGIN_EMAIL')
-EMAIL_HOST_PASSWORD = os.getenv('BREVO_SMTP_KEY')
-DEFAULT_FROM_EMAIL = os.getenv('SENDER_EMAIL', 'upzunction@gmail.com')
+# Updated to use your specific Render environment variables
+EMAIL_HOST_USER = os.getenv('BREVO_LOGIN_EMAIL')  # Maps to your login email
+EMAIL_HOST_PASSWORD = os.getenv('BREVO_SMTP_KEY') # Maps to your Brevo SMTP key
+DEFAULT_FROM_EMAIL = os.getenv('SENDER_EMAIL')    # Maps to upzunction@gmail.com
 
 EMAIL_TIMEOUT = 30
 
