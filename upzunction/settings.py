@@ -29,6 +29,7 @@ if RENDER_EXTERNAL_HOSTNAME:
 
 # Manually add your custom domains
 ALLOWED_HOSTS.append('upzunction.in')
+ALLOWED_HOSTS.append('127.0.0.1')
 ALLOWED_HOSTS.append('www.upzunction.in')
 
 

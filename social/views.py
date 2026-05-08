@@ -330,10 +330,10 @@ def privacy_policy_view(request):
 
 
 
-# ADD THIS TEMPORARY VIEW
-def create_superuser_temp_view(request):
-    secret_key = request.GET.get('key')
-    expected_key = os.getenv('TEMP_ADMIN_KEY')
+#  ADD THIS TEMPORARY VIEW
+# def create_superuser_temp_view(request):
+#     secret_key = request.GET.get('key')
+#     expected_key = os.getenv('TEMP_ADMIN_KEY')
     
-    if not secret_key or secret_key != expected_key:
-        return HttpResponse("Unauthorized: Wrong key.", status=401)
+#     if not secret_key or secret_key != expected_key:
+#         return HttpResponse("Unauthorized: Wrong key.", status=401)
