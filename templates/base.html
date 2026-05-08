@@ -19,6 +19,368 @@
     <!-- Your Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+<style>
+
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html{
+        scroll-behavior: smooth;
+    }
+
+    body{
+        background: #f5f7fb;
+        font-family: 'Segoe UI', sans-serif;
+        color: #222;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    main{
+        flex: 1;
+    }
+
+    a{
+        text-decoration: none;
+    }
+
+
+    /* =========================================
+       NAVBAR
+    ========================================= */
+
+    .navbar{
+        background: rgba(17,17,17,0.92) !important;
+        backdrop-filter: blur(12px);
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand{
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: #fff !important;
+        position: relative;
+    }
+
+    .navbar-brand::after{
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 40%;
+        height: 3px;
+        border-radius: 20px;
+        background: linear-gradient(90deg,#ff6b00,#0d6efd);
+    }
+
+    .navbar-nav{
+        gap: 8px;
+    }
+
+    .nav-link{
+        color: rgba(255,255,255,0.82) !important;
+        font-weight: 500;
+        padding: 10px 16px !important;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover{
+        background: rgba(255,255,255,0.08);
+        color: #fff !important;
+    }
+
+    .nav-link.active{
+        background: rgba(255,255,255,0.10);
+        color: #fff !important;
+    }
+
+    .navbar-text{
+        color: rgba(255,255,255,0.85) !important;
+        font-weight: 600;
+    }
+
+    .navbar-toggler{
+        border: none;
+        box-shadow: none !important;
+        padding: 8px 10px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.08);
+    }
+
+    .navbar-toggler:focus{
+        box-shadow: none !important;
+    }
+
+    .navbar-collapse{
+        transition: all 0.3s ease;
+    }
+
+
+    /* =========================================
+       NAVBAR BUTTONS
+    ========================================= */
+
+    .navbar .btn{
+        border-radius: 50px;
+        padding: 10px 18px;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .navbar .btn:hover{
+        transform: translateY(-2px);
+    }
+
+    .navbar .btn-warning{
+        background: linear-gradient(135deg,#ffb300,#ff8800);
+        color: #fff;
+    }
+
+    .navbar .btn-success{
+        background: linear-gradient(135deg,#25D366,#1ebe5d);
+        color: white;
+    }
+
+
+    /* =========================================
+       ALERTS
+    ========================================= */
+
+    .auto-disappearing-alert{
+        border: none;
+        border-radius: 18px;
+        padding: 16px 20px;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.06);
+        backdrop-filter: blur(10px);
+        animation: smoothFadeIn 0.4s ease;
+    }
+
+    .alert-success{
+        background: rgba(37,211,102,0.12);
+        color: #137c43;
+    }
+
+    .alert-danger{
+        background: rgba(220,53,69,0.12);
+        color: #b42333;
+    }
+
+    .alert-warning{
+        background: rgba(255,193,7,0.15);
+        color: #946200;
+    }
+
+    .alert-info{
+        background: rgba(13,202,240,0.12);
+        color: #0b7285;
+    }
+
+    .btn-close{
+        box-shadow: none !important;
+    }
+
+
+    /* =========================================
+       MAIN CONTENT
+    ========================================= */
+
+    main.container{
+        width: 100%;
+        max-width: 1400px;
+    }
+
+
+    /* =========================================
+       FOOTER
+    ========================================= */
+
+    footer{
+        background: #111 !important;
+        padding: 30px 0 !important;
+        margin-top: 60px !important;
+        border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    footer a{
+        color: rgba(255,255,255,0.68) !important;
+        transition: all 0.3s ease;
+    }
+
+    footer a:hover{
+        color: white !important;
+    }
+
+    footer p{
+        color: rgba(255,255,255,0.7);
+        font-size: 0.95rem;
+    }
+
+
+    /* =========================================
+       ANIMATIONS
+    ========================================= */
+
+    @keyframes smoothFadeIn{
+
+        from{
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to{
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    /* =========================================
+       SCROLLBAR
+    ========================================= */
+
+    ::-webkit-scrollbar{
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track{
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb{
+        background: linear-gradient(#ff6b00,#0d6efd);
+        border-radius: 20px;
+    }
+
+
+    /* =========================================
+       RESPONSIVE DESIGN
+    ========================================= */
+
+    @media (max-width: 992px){
+
+        .navbar-collapse{
+            margin-top: 18px;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .navbar-nav{
+            gap: 4px;
+        }
+
+        .navbar .btn{
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .navbar-text{
+            padding: 8px 12px;
+            display: block;
+        }
+    }
+
+    @media (max-width: 768px){
+
+        body{
+            font-size: 15px;
+        }
+
+        .navbar{
+            padding: 12px 0;
+        }
+
+        .navbar-brand{
+            font-size: 1.5rem;
+        }
+
+        .nav-link{
+            padding: 12px 14px !important;
+        }
+
+        main.container{
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        footer{
+            padding: 24px 16px !important;
+        }
+
+        footer p{
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 576px){
+
+        .navbar-brand{
+            font-size: 1.35rem;
+        }
+
+        .navbar-toggler{
+            padding: 6px 9px;
+        }
+
+        .nav-link{
+            font-size: 0.95rem;
+        }
+
+        .navbar .btn{
+            font-size: 0.92rem;
+            padding: 10px 14px;
+        }
+
+        .auto-disappearing-alert{
+            padding: 14px 16px;
+            font-size: 0.9rem;
+        }
+
+        footer a{
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+    }
+
+    @media (max-width: 400px){
+
+        .navbar-brand{
+            font-size: 1.2rem;
+        }
+
+        .navbar-collapse{
+            padding: 16px;
+        }
+
+        .nav-link{
+            padding: 10px 12px !important;
+        }
+
+        .navbar .btn{
+            font-size: 0.88rem;
+        }
+
+        footer{
+            padding: 22px 14px !important;
+        }
+
+        footer p{
+            font-size: 0.85rem;
+        }
+    }
+
+</style>
 
 <body>
     <!-- Sticky Navbar -->
