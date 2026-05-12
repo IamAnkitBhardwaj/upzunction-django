@@ -55,6 +55,8 @@ def api_nearest_bhandaras(request):
     results = []
     for b in active_bhandaras:
         # 1. Calculate distance
+        if b.latitude is None or b.longitude is None:
+            continue # Skip this location, it has no GPS data!
         distance = calculate_haversine_distance(user_lat, user_lng, b.latitude, b.longitude)
         
         # 2. 🔥 GET LIVE ML PREDICTION 🔥
