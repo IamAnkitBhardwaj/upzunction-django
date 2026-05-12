@@ -3,30 +3,28 @@ import re
 import math
 
 def extract_coordinates(url):
-    """
-    Takes a Google Maps URL, follows any redirects, and uses regex 
-    to extract the exact Latitude and Longitude.
-    """
-    try:
-        # We use a User-Agent so Google doesn't block us as a bot
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        response = requests.get(url, headers=headers, allow_redirects=True, timeout=10)
-        
-        # When goo.gl redirects, the final URL usually contains the coordinates like @26.8467,80.9462
-        final_url = response.url
+    # 1. We create a fake "disguise" so Google thinks Render is a real computer
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept-Language': 'en-US,en;q=0.9',
+    }
 
-        # Search for the @lat,lng pattern
+    try:
+        # 2. We pass the disguise in the request
+        response = requests.get(url, headers=headers, timeout=10, allow_redirects=True)
+        
+        # 3. Now Google will let the link expand, and we search for the coordinates
+        final_url = response.url
+        
+        # Your existing regex logic to find @26.xxx,80.xxx goes here...
         match = re.search(r'@(-?\d+\.\d+),(-?\d+\.\d+)', final_url)
         if match:
-            lat = float(match.group(1))
-            lng = float(match.group(2))
-            return lat, lng
+            return float(match.group(1)), float(match.group(2))
             
-        return None, None
     except Exception as e:
-        print(f"URL Extraction Error: {e}")
-        return None, None
-
+        print(f"Extraction failed: {e}")
+        
+    return None, None
 
 def calculate_haversine_distance(lat1, lon1, lat2, lon2):
     """
