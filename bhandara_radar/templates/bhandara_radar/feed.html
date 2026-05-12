@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<style>
+    /* Card Hover Animations */
+    .bhandara-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .bhandara-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+    }
+    
+    /* Compact Text Classes */
+    .card-title-compact { font-size: 1.1rem; line-height: 1.3; }
+    .text-compact { font-size: 0.85rem; line-height: 1.4; }
+    .badge-compact { font-size: 0.75rem; padding: 0.4em 0.6em; }
+    .btn-compact { font-size: 0.9rem; padding: 0.4rem; border-radius: 8px; }
+
+    /* Extra Small Devices (Phones) */
+    @media (max-width: 576px) {
+        .card-title-compact { font-size: 1rem; }
+        .text-compact { font-size: 0.8rem; }
+        .bhandara-card .card-body { padding: 1rem !important; }
+        h2 { font-size: 1.5rem; } /* Shrink top heading */
+    }
+</style>
+
+<div class="container mt-3 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2" data-aos="fade-down">
+        <h2 class="text-danger fw-bold m-0"><i class="fas fa-map-marked-alt"></i> Radar</h2>
+        <a href="{% url 'bhandara_radar:submit' %}" class="btn btn-outline-danger btn-sm fw-bold shadow-sm">
+            ➕ Add
+        </a>
+    </div>
+
+    <button id="findNearestBtn" class="btn btn-warning w-100 mb-4 fw-bold shadow py-2" style="font-size: 1rem; border-radius: 10px;" data-aos="fade-up">
+        📍 Find Nearest to Me
+    </button>
+
+    <div class="row" id="bhandara-list">
+        {% for bhandara in bhandaras %}
+        <div class="col-12 col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+            <div class="card h-100 shadow-sm border-0 bhandara-card {% if bhandara.is_verified_owner %}border-top border-primary border-4{% endif %}">
+                <div class="card-body p-3">
+                    
+                    <h6 class="card-title-compact fw-bold mb-2">
+                        {% if bhandara.is_verified_owner %}
+                            {{ bhandara.business_name|default:bhandara.organizer_name }} 
+                            <span class="badge bg-primary ms-1 badge-compact"><i class="fas fa-check-circle"></i> Verified</span>
+                        {% else %}
+                            📍 Bhandara - {{ bhandara.area_name }}
+                        {% endif %}
+                    </h6>
+
+                    <p class="text-muted text-compact mb-2">
+                        <i class="fas fa-map-marker-alt text-danger"></i> <strong>Area:</strong> {{ bhandara.area_name|default:"Unknown" }} <br>
+                        <i class="fas fa-user-circle text-secondary"></i> <strong>By:</strong> {{ bhandara.organizer_name|default:"Generous Soul" }}
+                    </p>
+
+                    <p class="text-dark text-compact mb-3">
+                        <i class="fas fa-utensils text-warning"></i> 
+                        {% if bhandara.is_verified_owner %}
+                            {{ bhandara.menu_details|default:"Menu Unconfirmed" }}
+                        {% else %}
+                            Menu Unconfirmed
+                        {% endif %}
+                    </p>
+                    
+                    <div class="mb-3 d-flex flex-wrap gap-2">
+                        <span class="badge bg-success badge-compact">{{ bhandara.ai_crowd_display|default:"Moving Fast" }}</span>
+                        <span class="badge bg-light text-dark border badge-compact">📍 Use GPS for distance</span>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ bhandara.google_maps_url }}" target="_blank" class="btn btn-primary btn-compact fw-bold">
+                            <i class="fas fa-location-arrow"></i> Navigate
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted mt-5" data-aos="zoom-in">
+            <h6>No active Bhandaras found right now.</h6>
+            <p class="small">Be the first to add one to the radar!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+// Initialize Animations
+AOS.init({ duration: 600, once: true });
+
+document.getElementById('findNearestBtn').addEventListener('click', function() {
+    const btn = this;
+    const feedContainer = document.getElementById('bhandara-list');
+    
+    btn.innerHTML = '⏳ Locating...';
+    btn.disabled = true;
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    } else {
+        alert("Geolocation is not supported.");
+        resetButton(btn);
+    }
+
+    function successCallback(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        fetch(`/radar/api/nearest/?lat=${lat}&lng=${lng}`)
+            .then(response => response.json())
+            .then(data => {
+                btn.innerHTML = '✅ Sorted by Nearest';
+                btn.classList.replace('btn-warning', 'btn-success');
+                
+                feedContainer.innerHTML = ''; 
+                
+                // Notice the (b, index) here. We use index to stagger the animation!
+                data.bhandaras.forEach((b, index) => {
+                    const verifiedBadge = b.is_verified ? `<span class="badge bg-primary ms-1 badge-compact"><i class="fas fa-check-circle"></i> Verified</span>` : '';
+                    const borderClass = b.is_verified ? `border-top border-primary border-4` : ``;
+                    const badgeColor = b.crowd_raw === 'HIGH' ? 'bg-danger' : (b.crowd_raw === 'MODERATE' ? 'bg-warning text-dark' : 'bg-success');
+                    
+                    let alternativeBtn = '';
+                    let alternativesBox = '';
+
+                    if (b.crowd_raw === 'HIGH' && b.alternatives && b.alternatives.length > 0) {
+                        alternativeBtn = `<button class="btn btn-outline-secondary btn-compact fw-bold mt-1" type="button" data-bs-toggle="collapse" data-bs-target="#alt-${b.id}">
+                            <i class="fas fa-search-location"></i> Alternatives
+                        </button>`;
+                        
+                        let altList = b.alternatives.map(alt => `
+                            <div class="d-flex justify-content-between align-items-center mt-2 border-bottom pb-1">
+                                <span class="text-compact"><strong>${alt.title}</strong><br><span class="text-success" style="font-size:0.75rem;"><i class="fas fa-walking"></i> ${alt.crowd_status}</span></span>
+                                <span class="badge bg-light text-dark border badge-compact">🚗 ${alt.distance} km</span>
+                            </div>
+                        `).join('');
+
+                        alternativesBox = `
+                            <div class="collapse mt-2" id="alt-${b.id}">
+                                <div class="card card-body bg-light border-0 p-2 shadow-sm rounded">
+                                    <span class="text-primary fw-bold mb-1" style="font-size: 0.8rem;"><i class="fas fa-magic"></i> AI Suggested:</span>
+                                    ${altList}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    const cardHTML = `
+                        <div class="col-12 col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="${index * 50}">
+                            <div class="card h-100 shadow-sm border-0 bhandara-card ${borderClass}">
+                                <div class="card-body p-3">
+                                    <h6 class="card-title-compact fw-bold mb-2">${b.title} ${verifiedBadge}</h6>
+                                    
+                                    <p class="text-muted text-compact mb-2">
+                                        <i class="fas fa-map-marker-alt text-danger"></i> <strong>Area:</strong> ${b.area} <br>
+                                        <i class="fas fa-user-circle text-secondary"></i> <strong>By:</strong> ${b.owner}
+                                    </p>
+                                    
+                                    <p class="text-dark text-compact mb-3">
+                                        <i class="fas fa-utensils text-warning"></i> ${b.menu}
+                                    </p>
+                                    
+                                    <div class="mb-3 d-flex flex-wrap gap-2">
+                                        <span class="badge ${badgeColor} badge-compact">${b.crowd_status}</span>
+                                        <span class="badge bg-light text-dark border badge-compact">🚗 ${b.distance} km</span>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <a href="${b.url}" target="_blank" class="btn btn-primary btn-compact fw-bold"><i class="fas fa-location-arrow"></i> Navigate</a>
+                                        ${alternativeBtn}
+                                    </div>
+                                    ${alternativesBox}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    feedContainer.innerHTML += cardHTML;
+                });
+                
+                // Refresh AOS so the newly injected JS cards animate properly
+                setTimeout(() => { AOS.refreshHard(); }, 100);
+            })
+            .catch(error => {
+                console.error('API Error:', error);
+                alert("Something went wrong calculating distances.");
+                resetButton(btn);
+            });
+    }
+
+    function errorCallback(error) {
+        alert("We need your location to find the nearest Bhandara!");
+        resetButton(btn);
+    }
+
+    function resetButton(btn) {
+        btn.innerHTML = '📍 Find Nearest to Me';
+        btn.disabled = false;
+    }
+});
+</script>
+{% endblock %}
