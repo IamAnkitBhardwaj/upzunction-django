@@ -1,0 +1,421 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    :root{
+        --primary-color:#2563eb;
+        --secondary-color:#f59e0b;
+        --dark-color:#0f172a;
+        --light-color:#ffffff;
+        --text-color:#64748b;
+        --glass-bg:rgba(255,255,255,0.12);
+    }
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+
+    body{
+        overflow-x:hidden;
+        background:#f8fafc;
+    }
+
+    /* HERO SECTION */
+    .hero-main-wrapper{
+        padding: 1rem 0 2rem;
+    }
+
+    .lucknow-community-wrapper{
+        position:relative;
+        width:100%;
+        min-height:85vh;
+        border-radius:28px;
+        overflow:hidden;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    .lucknow-community-image{
+        position:absolute;
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        top:0;
+        left:0;
+        transform:scale(1.03);
+    }
+
+    .lucknow-community-dark-layer{
+        position:absolute;
+        inset:0;
+        background:
+            linear-gradient(
+                to bottom right,
+                rgba(0,0,0,0.75),
+                rgba(0,0,0,0.45),
+                rgba(0,0,0,0.75)
+            );
+        z-index:1;
+    }
+
+    .lucknow-community-content{
+        position:relative;
+        z-index:2;
+        text-align:center;
+        color:white;
+        width:100%;
+        max-width:900px;
+        padding:2rem 1rem;
+    }
+
+    .lucknow-community-tag{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        background:var(--glass-bg);
+        backdrop-filter:blur(10px);
+        border:1px solid rgba(255,255,255,0.2);
+        color:#fff;
+        padding:0.75rem 1.2rem;
+        border-radius:50px;
+        font-size:0.85rem;
+        font-weight:600;
+        margin-bottom:1.5rem;
+    }
+
+    .lucknow-community-title{
+        font-size:2.3rem;
+        line-height:1.15;
+        font-weight:800;
+        margin-bottom:1rem;
+        letter-spacing:-1px;
+    }
+
+    .lucknow-community-text{
+        font-size:1rem;
+        line-height:1.8;
+        max-width:700px;
+        margin:auto;
+        color:rgba(255,255,255,0.9);
+    }
+
+    /* SERVICES SECTION */
+
+    .services-heading h3{
+        font-size:2rem;
+        font-weight:800;
+        color:var(--dark-color);
+    }
+
+    .services-heading p{
+        font-size:1rem;
+        color:var(--text-color);
+        margin-top:0.5rem;
+    }
+
+    .service-card{
+        position:relative;
+        background:#fff;
+        border-radius:28px;
+        overflow:hidden;
+        padding:2rem 1.5rem;
+        height:100%;
+        cursor:pointer;
+        transition:all 0.35s ease;
+        box-shadow:
+            0 10px 30px rgba(0,0,0,0.06);
+        border:1px solid rgba(0,0,0,0.04);
+    }
+
+    .service-card:hover{
+        transform:translateY(-10px);
+        box-shadow:
+            0 20px 45px rgba(0,0,0,0.12);
+    }
+
+    .service-icon{
+        width:85px;
+        height:85px;
+        margin:auto;
+        border-radius:22px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:2rem;
+        margin-bottom:1.4rem;
+    }
+
+    .community-icon{
+        background:rgba(37,99,235,0.12);
+        color:var(--primary-color);
+    }
+
+    .radar-icon{
+        background:rgba(245,158,11,0.14);
+        color:var(--secondary-color);
+    }
+
+    .service-card h4{
+        font-size:1.5rem;
+        font-weight:800;
+        margin-bottom:1rem;
+        color:var(--dark-color);
+    }
+
+    .service-card p{
+        color:var(--text-color);
+        line-height:1.8;
+        font-size:0.96rem;
+        margin-bottom:1.5rem;
+    }
+
+    .service-btn{
+        border-radius:50px;
+        padding:0.85rem 1.7rem;
+        font-weight:700;
+        transition:0.3s ease;
+    }
+
+    .service-btn:hover{
+        transform:scale(1.03);
+    }
+
+    .ai-badge{
+        font-size:0.65rem !important;
+        padding:0.45rem 0.55rem;
+        border-radius:30px;
+    }
+
+    /* Floating Glow */
+    .service-card::before{
+        content:'';
+        position:absolute;
+        width:180px;
+        height:180px;
+        border-radius:50%;
+        background:rgba(37,99,235,0.06);
+        top:-60px;
+        right:-60px;
+        z-index:0;
+    }
+
+    .service-card > *{
+        position:relative;
+        z-index:2;
+    }
+
+    /* RESPONSIVE */
+
+    @media (min-width:576px){
+        .lucknow-community-title{
+            font-size:3rem;
+        }
+
+        .lucknow-community-text{
+            font-size:1.05rem;
+        }
+    }
+
+    @media (min-width:768px){
+
+        .hero-main-wrapper{
+            padding:1.5rem 0 3rem;
+        }
+
+        .lucknow-community-wrapper{
+            min-height:88vh;
+        }
+
+        .lucknow-community-content{
+            padding:3rem;
+        }
+
+        .lucknow-community-title{
+            font-size:4rem;
+        }
+
+        .lucknow-community-text{
+            font-size:1.15rem;
+        }
+
+        .services-heading h3{
+            font-size:2.4rem;
+        }
+    }
+
+    @media (min-width:992px){
+
+        .lucknow-community-title{
+            font-size:5rem;
+        }
+
+        .lucknow-community-text{
+            font-size:1.2rem;
+        }
+
+        .service-card{
+            padding:2.5rem 2rem;
+        }
+    }
+
+    @media (max-width:575px){
+
+        .container{
+            padding-left:14px;
+            padding-right:14px;
+        }
+
+        .lucknow-community-wrapper{
+            border-radius:22px;
+            min-height:78vh;
+        }
+
+        .service-card h4{
+            font-size:1.3rem;
+        }
+
+        .service-card{
+            border-radius:24px;
+        }
+    }
+</style>
+
+<div class="container hero-main-wrapper">
+    <div class="lucknow-community-wrapper" data-aos="zoom-in" data-aos-duration="1200">
+
+        <img src="https://plus.unsplash.com/premium_photo-1697730430283-7e4456c78375?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+             alt="Lucknow Community"
+             class="lucknow-community-image">
+
+        <div class="lucknow-community-dark-layer"></div>
+
+        <div class="lucknow-community-content">
+
+            <div class="lucknow-community-tag" data-aos="fade-down">
+                <i class="fa-solid fa-location-dot"></i>
+                Explore Modern Lucknow
+            </div>
+
+            <h1 class="lucknow-community-title"
+                data-aos="fade-up"
+                data-aos-delay="200">
+                The Upzunction <br>
+                Central Hub
+            </h1>
+
+            <p class="lucknow-community-text"
+               data-aos="fade-up"
+               data-aos-delay="400">
+                Discover local services, community posts, and every important requirement of the city in one beautiful platform.
+            </p>
+
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+
+    <div class="row justify-content-center text-center mb-5">
+        <div class="col-lg-7 services-heading" data-aos="fade-up">
+            <h3>Explore Our Services</h3>
+            <p>
+                Choose a platform module below to get started and experience the smart city ecosystem.
+            </p>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+
+       
+
+        <!-- RADAR CARD -->
+        <div class="col-12 col-md-6 col-lg-5"
+             data-aos="fade-left"
+             data-aos-delay="300">
+
+            <div class="service-card"
+                 onclick="location.href='/radar/'">
+
+                <div class="service-icon radar-icon">
+                    <i class="fa-solid fa-bowl-food"></i>
+                </div>
+
+                <h4>
+                    Live Bhandara Radar
+                    <span class="badge bg-danger ai-badge ms-1">
+                        AI
+                    </span>
+                </h4>
+
+                <p>
+                    Find nearby community feasts with smart GPS routing,
+                    live updates, and AI-based crowd prediction technology.
+                </p>
+
+                <a href="/radar/"
+                   class="btn btn-outline-warning text-dark service-btn">
+                    Open Radar
+                </a>
+
+            </div>
+        </div>
+
+         <!-- COMMUNITY CARD -->
+        <div class="col-12 col-md-6 col-lg-5"
+             data-aos="fade-right"
+             data-aos-delay="100">
+
+            <div class="service-card"
+                 onclick="location.href='/community/'">
+
+                <div class="service-icon community-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <h4>Community Board</h4>
+
+                <p>
+                    Post requirements, find jobs, explore education,
+                    discover opportunities, and connect with the local community easily.
+                </p>
+
+                <a href="/community/"
+                   class="btn btn-outline-primary service-btn">
+                    Enter Community
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Optional smooth hover effect for touch + desktop
+    document.querySelectorAll('.service-card').forEach(card => {
+
+        card.addEventListener('touchstart', () => {
+            card.style.transform = 'scale(0.98)';
+        });
+
+        card.addEventListener('touchend', () => {
+            card.style.transform = 'scale(1)';
+        });
+
+    });
+
+    // Initialize AOS safely
+    if (typeof AOS !== "undefined") {
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+    }
+</script>
+
+{% endblock %}

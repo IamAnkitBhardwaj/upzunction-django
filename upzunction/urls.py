@@ -8,6 +8,7 @@ from django.contrib import admin
 from django.urls import path, include
 from social import views
 from social.admin import upzunction_admin 
+from upzunction import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -18,7 +19,8 @@ urlpatterns = [
    
     # This correctly imports all of your app's URLs from social/urls.py,
     # including the new OTP registration URLs.
-    path('', include('social.urls')),
+    path('', views.index, name='index'),
+    path('community/', include('social.urls')),
     path('radar/', include('bhandara_radar.urls')),
 
 
