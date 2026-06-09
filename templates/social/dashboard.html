@@ -15,7 +15,6 @@
         min-height: 100vh;
     }
 
-    /* Dashboard Container */
     .dashboard-container {
         max-width: 1400px;
         margin: 0 auto;
@@ -82,11 +81,6 @@
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
     }
 
-    .stat-card.active {
-        border: 2px solid #667eea;
-        background: #f0f4ff;
-    }
-
     .stat-icon {
         font-size: 28px;
         margin-bottom: 12px;
@@ -105,6 +99,51 @@
         font-weight: 500;
     }
 
+    /* App Tabs - NEW */
+    .app-tabs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        background: white;
+        padding: 8px;
+        border-radius: 60px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .app-tab {
+        flex: 1;
+        padding: 12px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: transparent;
+        color: #64748b;
+        border: none;
+    }
+
+    .app-tab i {
+        font-size: 16px;
+    }
+
+    .app-tab:hover {
+        background: #f1f5f9;
+        color: #1e293b;
+    }
+
+    .app-tab.active {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
     /* Main Content Cards */
     .content-card {
         background: white;
@@ -112,6 +151,17 @@
         overflow: hidden;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
         margin-bottom: 24px;
+        display: none;
+    }
+
+    .content-card.active {
+        display: block;
+        animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .card-header-custom {
@@ -140,7 +190,71 @@
         font-size: 20px;
     }
 
-    /* Message Items */
+    /* Message Container - Mobile Optimized */
+    .messages-container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    /* Desktop: side by side */
+    @media (min-width: 769px) {
+        .messages-container {
+            flex-direction: row;
+        }
+        .received-column, .sent-column {
+            flex: 1;
+        }
+        .received-column {
+            border-right: 1px solid #eef2f6;
+        }
+    }
+
+    /* Mobile: separate sections with toggle */
+    @media (max-width: 768px) {
+        .messages-container {
+            flex-direction: column;
+        }
+        
+        .message-type-toggle {
+            display: flex;
+            gap: 10px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-bottom: 1px solid #eef2f6;
+        }
+        
+        .type-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            background: #f1f5f9;
+            color: #64748b;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .type-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .received-column, .sent-column {
+            display: none;
+        }
+        
+        .received-column.active-mobile, .sent-column.active-mobile {
+            display: block;
+        }
+        
+        .received-column {
+            border-right: none;
+        }
+    }
+
     .message-list {
         padding: 8px 0;
     }
@@ -414,6 +528,32 @@
         padding: 16px 24px;
     }
 
+    /* Community Requirement Item */
+    .requirement-item {
+        padding: 20px 24px;
+        border-bottom: 1px solid #eef2f6;
+        transition: all 0.2s;
+    }
+
+    .requirement-item:hover {
+        background: #fafbfd;
+    }
+
+    .requirement-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .requirement-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
         .dashboard-container {
@@ -441,6 +581,16 @@
             font-size: 22px;
         }
         
+        .app-tabs {
+            border-radius: 30px;
+            padding: 6px;
+        }
+        
+        .app-tab {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+        
         .card-header-custom {
             padding: 16px 20px;
         }
@@ -454,27 +604,33 @@
             padding: 16px;
         }
         
-        .message-footer {
+        .tourist-actions {
             flex-direction: column;
-            align-items: stretch;
         }
         
-        .btn-custom {
+        .tourist-actions .btn-custom {
+            width: 100%;
             justify-content: center;
         }
     }
 
     @media (max-width: 480px) {
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        
         .message-meta {
             flex-direction: column;
             align-items: flex-start;
         }
         
-        .tourist-actions {
+        .message-footer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .message-footer .btn-custom {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .requirement-header {
             flex-direction: column;
         }
     }
@@ -489,35 +645,46 @@
             </span>
             Welcome back, {{ user.username }}!
         </h1>
-        <p>Manage your messages, requirements, and tourist places from one beautiful dashboard</p>
+        <p>Manage your community requirements, messages, and tourist places</p>
     </div>
 
     <!-- Stats Overview -->
     <div class="stats-grid" data-aos="fade-up" data-aos-delay="50">
-        <div class="stat-card" onclick="scrollToSection('messages')">
-            <div class="stat-icon">📬</div>
+        <div class="stat-card" data-tab="community">
+            <div class="stat-icon">💬</div>
             <div class="stat-number">{{ received_messages|length|add:sent_messages|length }}</div>
             <div class="stat-label">Total Messages</div>
         </div>
-        <div class="stat-card" onclick="scrollToSection('requirements')">
+        <div class="stat-card" data-tab="community">
             <div class="stat-icon">📝</div>
             <div class="stat-number">{{ user_posts|length }}</div>
-            <div class="stat-label">My Requirements</div>
+            <div class="stat-label">Requirements</div>
         </div>
-        <div class="stat-card" onclick="scrollToSection('tourist')">
+        <div class="stat-card" data-tab="tourism">
             <div class="stat-icon">🏔️</div>
             <div class="stat-number">{{ my_tourist_spots|length }}</div>
             <div class="stat-label">Tourist Places</div>
         </div>
-        <div class="stat-card" onclick="scrollToSection('messages')">
+        <div class="stat-card" data-tab="community">
             <div class="stat-icon">✉️</div>
             <div class="stat-number">{{ received_messages|length }}</div>
             <div class="stat-label">Pending Replies</div>
         </div>
     </div>
 
-    <!-- Messages Section -->
-    <div id="messages" class="content-card" data-aos="fade-up" data-aos-delay="100">
+    <!-- App Tabs -->
+    <div class="app-tabs" data-aos="fade-up" data-aos-delay="100">
+        <button class="app-tab active" data-content="community">
+            <i class="fas fa-users"></i> Community Hub
+        </button>
+        <button class="app-tab" data-content="tourism">
+            <i class="fas fa-mountain"></i> Tourism Explorer
+        </button>
+    </div>
+
+    <!-- COMMUNITY HUB SECTION -->
+    <div id="community" class="content-card active" data-aos="fade-up" data-aos-delay="150">
+        <!-- Messages Section -->
         <div class="card-header-custom">
             <h3>
                 <i class="fas fa-envelope"></i>
@@ -528,11 +695,11 @@
             </span>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
-            <!-- Received Messages -->
-            <div style="border-right: 1px solid #eef2f6;">
-                <div style="padding: 12px 20px; background: #f8fafc; border-bottom: 1px solid #eef2f6;">
-                    <strong><i class="fas fa-download me-1" style="color: #10b981;"></i> Received</strong>
+        <div class="messages-container">
+            <!-- Received Messages Column -->
+            <div class="received-column" id="receivedColumn">
+                <div class="message-list-header" style="padding: 12px 24px; background: #f8fafc; border-bottom: 1px solid #eef2f6;">
+                    <strong><i class="fas fa-download me-1" style="color: #10b981;"></i> Received Messages</strong>
                 </div>
                 <div class="message-list">
                     {% for message in received_messages %}
@@ -545,13 +712,13 @@
                             <span class="message-date">{{ message.sent_at|date:"d M Y" }}</span>
                         </div>
                         <div class="post-title">
-                            <i class="fas fa-tag me-1"></i> {{ message.post.title|truncatechars:50 }}
+                            <i class="fas fa-tag me-1"></i> Regarding: {{ message.post.title|truncatechars:50 }}
                         </div>
                         <div class="message-body">
                             "{{ message.body }}"
                         </div>
                         {% if message.sender_phone %}
-                        <div class="contact-info" style="background: #f1f5f9; padding: 8px 12px; border-radius: 12px; margin-bottom: 12px; font-size: 12px;">
+                        <div style="background: #f1f5f9; padding: 8px 12px; border-radius: 12px; margin-bottom: 12px; font-size: 12px;">
                             <i class="fas fa-phone me-2"></i> Contact: {{ message.sender_phone }}
                         </div>
                         {% endif %}
@@ -562,7 +729,7 @@
                             </span>
                             {% else %}
                             <button class="btn-custom btn-success-custom" data-bs-toggle="modal" data-bs-target="#approveModal-{{ message.id }}">
-                                <i class="fas fa-check me-1"></i> Approve & Share
+                                <i class="fas fa-check me-1"></i> Approve & Share Contact
                             </button>
                             {% endif %}
                         </div>
@@ -579,7 +746,7 @@
                                 <form method="POST" action="{% url 'approve_message' message.id %}">
                                     {% csrf_token %}
                                     <div class="modal-body">
-                                        <p>Approve message from <strong>{{ message.sender.username }}</strong> for post <strong>"{{ message.post.title }}"</strong></p>
+                                        <p>Approve message from <strong>{{ message.sender.username }}</strong> for requirement <strong>"{{ message.post.title }}"</strong></p>
                                         <div class="mb-3">
                                             <label class="form-label">Your Phone Number (Optional)</label>
                                             <input type="text" name="recipient_phone" class="form-control" placeholder="Share your number for easy contact">
@@ -597,15 +764,16 @@
                     <div class="empty-state">
                         <i class="fas fa-inbox"></i>
                         <p>No messages received yet</p>
+                        <small class="text-muted">When someone responds to your requirements, you'll see them here</small>
                     </div>
                     {% endfor %}
                 </div>
             </div>
             
-            <!-- Sent Messages -->
-            <div>
-                <div style="padding: 12px 20px; background: #f8fafc; border-bottom: 1px solid #eef2f6;">
-                    <strong><i class="fas fa-upload me-1" style="color: #667eea;"></i> Sent</strong>
+            <!-- Sent Messages Column -->
+            <div class="sent-column" id="sentColumn">
+                <div class="message-list-header" style="padding: 12px 24px; background: #f8fafc; border-bottom: 1px solid #eef2f6;">
+                    <strong><i class="fas fa-upload me-1" style="color: #667eea;"></i> Sent Messages</strong>
                 </div>
                 <div class="message-list">
                     {% for message in sent_messages %}
@@ -618,7 +786,7 @@
                             <span class="message-date">{{ message.sent_at|date:"d M Y" }}</span>
                         </div>
                         <div class="post-title">
-                            <i class="fas fa-tag me-1"></i> {{ message.post.title|truncatechars:50 }}
+                            <i class="fas fa-tag me-1"></i> Regarding: {{ message.post.title|truncatechars:50 }}
                         </div>
                         <div class="message-body">
                             "{{ message.body }}"
@@ -629,7 +797,7 @@
                                 <i class="fas fa-check-circle me-1"></i> Approved
                             </span>
                             {% if message.recipient_phone_on_approval %}
-                            <div class="contact-info" style="background: #f1f5f9; padding: 6px 12px; border-radius: 12px; font-size: 12px;">
+                            <div style="background: #f1f5f9; padding: 6px 12px; border-radius: 12px; font-size: 12px;">
                                 <i class="fas fa-phone me-2"></i> Their Contact: {{ message.recipient_phone_on_approval }}
                             </div>
                             {% endif %}
@@ -644,16 +812,21 @@
                     <div class="empty-state">
                         <i class="fas fa-paper-plane"></i>
                         <p>No messages sent yet</p>
+                        <small class="text-muted">When you respond to requirements, your messages will appear here</small>
                     </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
-    </div>
+        
+        <!-- Mobile Message Toggle (Hidden on Desktop) -->
+        <div class="message-type-toggle" style="display: none;">
+            <button class="type-btn active" data-type="received">📥 Received</button>
+            <button class="type-btn" data-type="sent">📤 Sent</button>
+        </div>
 
-    <!-- Requirements Section -->
-    <div id="requirements" class="content-card" data-aos="fade-up" data-aos-delay="150">
-        <div class="card-header-custom">
+        <!-- My Requirements Section -->
+        <div class="card-header-custom" style="border-top: 1px solid #eef2f6;">
             <h3>
                 <i class="fas fa-tasks"></i>
                 My Requirements
@@ -663,16 +836,16 @@
             </a>
         </div>
         
-        <div style="padding: 8px 0;">
+        <div>
             {% for post in user_posts %}
-            <div class="message-item">
-                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
-                    <strong class="user-name">{{ post.title }}</strong>
+            <div class="requirement-item">
+                <div class="requirement-header">
+                    <span class="requirement-title">{{ post.title }}</span>
                     <span class="badge-custom {% if post.is_active %}badge-active{% else %}badge-inactive{% endif %}">
                         {% if post.is_active %}Active{% else %}Inactive{% endif %}
                     </span>
                 </div>
-                <p class="message-body" style="background: none; padding: 0 0 8px 0;">{{ post.description|truncatewords:30 }}</p>
+                <p style="font-size: 13px; color: #475569; line-height: 1.5; margin-bottom: 12px;">{{ post.description|truncatewords:30 }}</p>
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <small class="message-date"><i class="far fa-clock me-1"></i> Posted on {{ post.created_at|date:"d M Y" }}</small>
                     <div class="d-flex gap-2">
@@ -689,14 +862,14 @@
             <div class="empty-state">
                 <i class="fas fa-tasks"></i>
                 <p>You haven't posted any requirements yet</p>
-                <a href="{% url 'create_post' %}" class="btn-custom btn-primary-custom">Create Your First Post</a>
+                <a href="{% url 'create_post' %}" class="btn-custom btn-primary-custom">Create Your First Requirement</a>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Tourist Places Section -->
-    <div id="tourist" class="content-card" data-aos="fade-up" data-aos-delay="200">
+    <!-- TOURISM EXPLORER SECTION -->
+    <div id="tourism" class="content-card" data-aos="fade-up" data-aos-delay="200">
         <div class="card-header-custom">
             <h3>
                 <i class="fas fa-mountain"></i>
@@ -747,11 +920,104 @@
 </div>
 
 <script>
-    function scrollToSection(sectionId) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Tab switching between Community and Tourism
+    const appTabs = document.querySelectorAll('.app-tab');
+    const contentCards = document.querySelectorAll('.content-card');
+    const statCards = document.querySelectorAll('.stat-card');
+
+    function switchTab(tabId) {
+        // Hide all content cards
+        contentCards.forEach(card => {
+            card.classList.remove('active');
+        });
+        
+        // Show selected content card
+        const activeCard = document.getElementById(tabId);
+        if (activeCard) {
+            activeCard.classList.add('active');
+        }
+        
+        // Update tab buttons
+        appTabs.forEach(tab => {
+            if (tab.getAttribute('data-content') === tabId) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+        
+        // Save to localStorage
+        localStorage.setItem('activeDashboardTab', tabId);
+    }
+
+    appTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.getAttribute('data-content');
+            switchTab(tabId);
+        });
+    });
+
+    statCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const tabId = card.getAttribute('data-tab');
+            if (tabId) {
+                switchTab(tabId);
+            }
+        });
+    });
+
+    // Load saved tab
+    const savedTab = localStorage.getItem('activeDashboardTab');
+    if (savedTab && (savedTab === 'community' || savedTab === 'tourism')) {
+        switchTab(savedTab);
+    }
+
+    // Mobile message toggle functionality
+    function initMobileMessageToggle() {
+        const toggleContainer = document.querySelector('.message-type-toggle');
+        if (!toggleContainer) return;
+        
+        const isMobile = window.innerWidth <= 768;
+        const receivedCol = document.getElementById('receivedColumn');
+        const sentCol = document.getElementById('sentColumn');
+        
+        if (isMobile) {
+            toggleContainer.style.display = 'flex';
+            
+            if (!document.querySelector('.type-btn')) {
+                toggleContainer.innerHTML = `
+                    <button class="type-btn active" data-type="received">📥 Received</button>
+                    <button class="type-btn" data-type="sent">📤 Sent</button>
+                `;
+                
+                const typeBtns = document.querySelectorAll('.type-btn');
+                typeBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const type = btn.getAttribute('data-type');
+                        typeBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        if (type === 'received') {
+                            receivedCol.classList.add('active-mobile');
+                            sentCol.classList.remove('active-mobile');
+                        } else {
+                            sentCol.classList.add('active-mobile');
+                            receivedCol.classList.remove('active-mobile');
+                        }
+                    });
+                });
+            }
+            
+            receivedCol.classList.add('active-mobile');
+            sentCol.classList.remove('active-mobile');
+        } else {
+            toggleContainer.style.display = 'none';
+            receivedCol.classList.remove('active-mobile');
+            sentCol.classList.remove('active-mobile');
         }
     }
+    
+    window.addEventListener('load', initMobileMessageToggle);
+    window.addEventListener('resize', initMobileMessageToggle);
 </script>
 {% endblock %}
