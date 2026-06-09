@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from bhandara_radar.utils import extract_coordinates
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 class State(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -28,7 +29,7 @@ class TouristSpot(models.Model):
     latitude = models.FloatField( blank=True,null=True)
     longitude = models.FloatField(blank=True,null=True)
     area_name = models.CharField(max_length=100,blank=True,null=True)
-    image = models.ImageField(upload_to='tourism/spots/',blank=True,null=True)
+    image = CloudinaryField('image',blank=True,null=True)
     rating = models.FloatField(default=0)
     views = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
