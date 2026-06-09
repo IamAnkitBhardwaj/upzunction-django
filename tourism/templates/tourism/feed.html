@@ -1,0 +1,569 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- AOS Animation CSS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+    /* ===== ONLY PIXEL UNITS ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    .tourism-wrapper {
+        background: #f4f7fc;
+        min-height: 100vh;
+        padding: 16px 0 48px 0;
+    }
+    
+    .custom-container {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 16px;
+    }
+    
+    /* Header Card */
+    .header-card {
+        background: white;
+        border-radius: 28px;
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .title-section {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    
+    .title-icon {
+        background: linear-gradient(135deg, #FF8C42, #FFB347);
+        width: 48px;
+        height: 48px;
+        border-radius: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        box-shadow: 0 6px 14px rgba(255, 140, 66, 0.25);
+    }
+    
+    .title-text {
+        font-size: 26px;
+        font-weight: 800;
+        color: #1e2f3a;
+        letter-spacing: -0.3px;
+        margin: 0;
+    }
+    
+    .title-text span {
+        background: linear-gradient(120deg, #1e6f5c, #289672);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+    
+    /* Filter Card */
+    .filter-card {
+        background: white;
+        border-radius: 28px;
+        padding: 20px 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        border: 1px solid #eef2f8;
+    }
+    
+    .filter-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #2c4b5c;
+        margin-bottom: 8px;
+        display: block;
+        letter-spacing: 0.3px;
+    }
+    
+    .filter-label i {
+        margin-right: 6px;
+        font-size: 13px;
+        color: #ff9142;
+    }
+    
+    .form-select-styled {
+        border-radius: 60px;
+        border: 1px solid #e0e7ed;
+        padding: 12px 18px;
+        font-size: 14px;
+        background-color: #ffffff;
+        transition: all 0.2s;
+        cursor: pointer;
+        width: 100%;
+    }
+    
+    .form-select-styled:focus {
+        border-color: #ff8c42;
+        box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2);
+        outline: none;
+    }
+    
+    .btn-gradient-near {
+        background: linear-gradient(105deg, #ff9142, #ff6a2e);
+        border: none;
+        border-radius: 60px;
+        padding: 12px 10px;
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.2s;
+        box-shadow: 0 4px 10px rgba(255, 109, 46, 0.2);
+    }
+    
+    .btn-gradient-near:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(105deg, #ff7a2f, #ff5618);
+        box-shadow: 0 10px 18px rgba(255, 88, 24, 0.3);
+    }
+    
+    .btn-gradient-near i {
+        font-size: 16px;
+    }
+    
+    /* Tourism Cards */
+    .tourism-card {
+        border-radius: 28px;
+        border: none;
+        background: white;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.08);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .tourism-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-img-top-custom {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        background: #d9e2ec;
+    }
+    
+    .card-body-custom {
+        padding: 18px 18px 12px 18px;
+        flex: 1;
+    }
+    
+    .spot-title {
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: #1f3b45;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .spot-title i {
+        color: #ff8c42;
+        font-size: 18px;
+    }
+    
+    .location-text {
+        font-size: 12px;
+        color: #6f8faa;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    
+    .location-text i {
+        width: 14px;
+        font-size: 11px;
+        color: #5d7f97;
+    }
+    
+    .rating-badge {
+        background: #fff0e3;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 40px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #c96f1e;
+        margin-bottom: 12px;
+    }
+    
+    .distance-chip {
+        background: #eef3fa;
+        border-radius: 40px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #2c6b4a;
+        margin-top: 10px;
+    }
+    
+    .card-footer-custom {
+        background: transparent;
+        border-top: 1px solid #ecf3f9;
+        padding: 14px 18px 18px 18px;
+    }
+    
+    .btn-navigate {
+        background: #1e466e;
+        border: none;
+        border-radius: 60px;
+        padding: 11px 0;
+        font-weight: 600;
+        font-size: 13px;
+        color: white;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: 0.2s;
+    }
+    
+    .btn-navigate:hover {
+        background: #0f3552;
+        transform: scale(0.98);
+    }
+    
+    /* empty state */
+    .empty-tourism {
+        text-align: center;
+        padding: 56px 20px;
+        background: white;
+        border-radius: 48px;
+        margin-top: 16px;
+    }
+    
+    .empty-tourism i {
+        font-size: 64px;
+        color: #cbdae6;
+        margin-bottom: 16px;
+    }
+    
+    /* responsive pixel tuning */
+    @media (max-width: 768px) {
+        .custom-container {
+            padding: 0 12px;
+        }
+        .header-card {
+            padding: 16px 20px;
+        }
+        .title-text {
+            font-size: 22px;
+        }
+        .filter-card {
+            padding: 18px 18px;
+        }
+        .title-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+        }
+        .btn-gradient-near {
+            padding: 11px 8px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .title-text {
+            font-size: 20px;
+        }
+        .card-img-top-custom {
+            height: 170px;
+        }
+        .spot-title {
+            font-size: 16px;
+        }
+    }
+    
+    /* loading state (minimal) */
+    .loading-placeholder {
+        text-align: center;
+        padding: 48px;
+        background: white;
+        border-radius: 28px;
+    }
+</style>
+
+<div class="tourism-wrapper">
+    <div class="custom-container">
+        
+        <!-- Header Section -->
+        <div class="header-card" data-aos="fade-up" data-aos-duration="600">
+            <div class="title-section">
+                <div class="title-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <h2 class="title-text">
+                    Tourism <span>Explorer</span>
+                </h2>
+            </div>
+            <p class="text-muted mt-2 mb-0" style="font-size: 13px; padding-left: 4px;">
+                <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i> Discover amazing destinations & hidden gems
+            </p>
+        </div>
+        
+        <!-- Filters Section -->
+        <div class="filter-card" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+            <div class="row g-3">
+                <div class="col-md-5 col-12">
+                    <label class="filter-label"><i class="fas fa-flag-checkered"></i> Select State</label>
+                    <select id="stateSelect" class="form-select-styled">
+                        <option value="">All States</option>
+                        {% for state in states %}
+                        <option value="{{ state.id }}">{{ state.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-5 col-12">
+                    <label class="filter-label"><i class="fas fa-city"></i> Select City</label>
+                    <select id="citySelect" class="form-select-styled">
+                        <option value="">Select City</option>
+                    </select>
+                </div>
+                <div class="col-md-2 col-12">
+                    <label class="filter-label" style="opacity: 0;">Action</label>
+                    <button id="findNearestBtn" class="btn-gradient-near">
+                        <i class="fas fa-location-dot"></i> Near Me
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Grid -->
+        <div id="tourism-list" class="row g-4">
+            {% for spot in spots %}
+            <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:50 }}">
+                <div class="tourism-card">
+                    {% if spot.image %}
+                    <img src="{{ spot.image.url }}" class="card-img-top-custom" alt="{{ spot.name }}">
+                    {% else %}
+                    <div class="card-img-top-custom d-flex align-items-center justify-content-center bg-light">
+                        <i class="fas fa-mountain-sun" style="font-size: 48px; color: #cbdae6;"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body-custom">
+                        <div class="spot-title">
+                            <i class="fas fa-tree"></i> {{ spot.name }}
+                        </div>
+                        <div class="location-text">
+                            <i class="fas fa-location-dot"></i> {{ spot.city.name }}, {{ spot.city.state.name }}
+                        </div>
+                        <div class="rating-badge">
+                            <i class="fas fa-star" style="color: #f4b942;"></i> {{ spot.rating }}
+                        </div>
+                    </div>
+                    <div class="card-footer-custom">
+                        <a href="{{ spot.google_maps_url }}" target="_blank" class="btn-navigate">
+                            <i class="fas fa-compass"></i> Navigate
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 empty-tourism">
+                <i class="fas fa-map-marked-alt"></i>
+                <h5 style="font-weight: 600;">No spots available</h5>
+                <p class="text-muted">Select a state or city to explore amazing places</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Initialize AOS animations
+    AOS.init({
+        once: true,
+        duration: 500,
+        offset: 20
+    });
+</script>
+
+<script>
+    // -------------------- BACKEND INTEGRATION (UNCHANGED LOGIC) --------------------
+    const stateSelect = document.getElementById('stateSelect');
+    const citySelect = document.getElementById('citySelect');
+    
+    // Populate cities when state changes
+    stateSelect.addEventListener('change', function() {
+        const stateId = this.value;
+        if (!stateId) {
+            citySelect.innerHTML = '<option value="">Select City</option>';
+            return;
+        }
+        
+        fetch(`/tourism/api/cities/?state=${stateId}`)
+            .then(response => response.json())
+            .then(data => {
+                citySelect.innerHTML = '<option value="">Select City</option>';
+                if (data.cities && data.cities.length) {
+                    data.cities.forEach(city => {
+                        citySelect.innerHTML += `<option value="${city.id}">${city.name}</option>`;
+                    });
+                } else {
+                    citySelect.innerHTML = '<option value="">No cities available</option>';
+                }
+            })
+            .catch(err => console.error("Error loading cities:", err));
+    });
+    
+    // Filter spots by city
+    citySelect.addEventListener('change', function() {
+        const cityId = this.value;
+        if (!cityId) {
+            // Optionally reload all spots? based on typical UX, we keep empty? but original just updates when city selected.
+            // To respect original: only fetch when city has value.
+            return;
+        }
+        
+        fetch(`/tourism/api/spots/?city=${cityId}`)
+            .then(response => response.json())
+            .then(data => {
+                renderTourismCards(data.spots);
+                // refresh AOS for new dynamic elements
+                AOS.refresh();
+            })
+            .catch(err => console.error("Error loading spots:", err));
+    });
+    
+    // Find nearest spots using geolocation
+    document.getElementById('findNearestBtn').addEventListener('click', function() {
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser.");
+            return;
+        }
+        
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                fetch(`/tourism/api/nearest/?lat=${lat}&lng=${lng}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        renderTourismCards(data.spots);
+                        AOS.refresh();
+                    })
+                    .catch(err => console.error("Error fetching nearest spots:", err));
+            },
+            function(error) {
+                alert("Unable to retrieve your location. Please allow location access.");
+                console.error("Geolocation error:", error);
+            }
+        );
+    });
+    
+    // Core rendering function (kept exactly same mapping but improved visual consistency with icons)
+    function renderTourismCards(spots) {
+        const container = document.getElementById('tourism-list');
+        if (!container) return;
+        
+        if (!spots || spots.length === 0) {
+            container.innerHTML = `
+                <div class="col-12 empty-tourism">
+                    <i class="fas fa-map-pin"></i>
+                    <h5 style="font-weight: 600;">No spots found</h5>
+                    <p class="text-muted">Try a different location or adjust filters</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        spots.forEach((spot, idx) => {
+            const imageHtml = spot.image 
+                ? `<img src="${spot.image}" class="card-img-top-custom" alt="${spot.name}">`
+                : `<div class="card-img-top-custom d-flex align-items-center justify-content-center bg-light"><i class="fas fa-image" style="font-size: 48px; color: #cbdae6;"></i></div>`;
+            
+            const distanceHtml = spot.distance 
+                ? `<div class="distance-chip"><i class="fas fa-car-side"></i> ${spot.distance} km away</div>`
+                : '';
+            
+            html += `
+                <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="${(idx % 6) * 50}">
+                    <div class="tourism-card">
+                        ${imageHtml}
+                        <div class="card-body-custom">
+                            <div class="spot-title">
+                                <i class="fas fa-map-marked-alt"></i> ${escapeHtml(spot.name)}
+                            </div>
+                            <div class="location-text">
+                                <i class="fas fa-location-dot"></i> ${escapeHtml(spot.city || '')}${spot.state ? ', ' + escapeHtml(spot.state) : ''}
+                            </div>
+                            <div class="rating-badge">
+                                <i class="fas fa-star" style="color: #f4b942;"></i> ${spot.rating || 'N/A'}
+                            </div>
+                            ${distanceHtml}
+                        </div>
+                        <div class="card-footer-custom">
+                            <a href="${escapeHtml(spot.map_url || '#')}" target="_blank" class="btn-navigate">
+                                <i class="fas fa-compass"></i> Navigate
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        
+        // Re-trigger AOS for new items (optional but ensures animations)
+        if (typeof AOS !== 'undefined') {
+            AOS.refresh();
+        }
+    }
+    
+    // simple escape to prevent XSS (keeping original data safe)
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+    
+    // small enhancement: initial load if any city already pre-selected? no, but maintain consistency.
+    // Also ensure that if state initially has a value and city select gets pre-filled? Not needed, original doesn't.
+    // But we preserve identical backend behavior
+</script>
+
+{% endblock %}

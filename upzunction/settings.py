@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social',
     'bhandara_radar.apps.BhandaraRadarConfig',
+    'tourism.apps.TourismConfig',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # --- VISITOR TRACKING MIDDLEWARE (ADDED HERE) ---
-    'social.middleware.VisitorTrackingMiddleware',
+    # 'social.middleware.VisitorTrackingMiddleware',
 ]
 
 ROOT_URLCONF = 'upzunction.urls'
@@ -133,3 +134,5 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 AUTHENTICATION_BACKENDS = ['social.backends.EmailBackend']
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

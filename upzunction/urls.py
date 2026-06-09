@@ -7,22 +7,24 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.contrib import admin
 from django.urls import path, include
 from social import views
-from social.admin import upzunction_admin 
-from upzunction import views
+from upzunction import settings, views
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    
-    
     # This correctly imports all the pre-built auth URLs like login/logout.
     path('accounts/', include('django.contrib.auth.urls')),
-   
     # This correctly imports all of your app's URLs from social/urls.py,
     # including the new OTP registration URLs.
     path('', views.index, name='index'),
     path('community/', include('social.urls')),
     path('radar/', include('bhandara_radar.urls')),
+    path('tourism/', include('tourism.urls'))
 
 
     
 ]
+
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)

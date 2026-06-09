@@ -3,419 +3,735 @@
 {% block content %}
 
 <style>
-    :root{
-        --primary-color:#2563eb;
-        --secondary-color:#f59e0b;
-        --dark-color:#0f172a;
-        --light-color:#ffffff;
-        --text-color:#64748b;
-        --glass-bg:rgba(255,255,255,0.12);
+    :root {
+        --primary-color: #2563eb;
+        --secondary-color: #f59e0b;
+        --success-color: #28a745;
+        --dark-color: #0f172a;
+        --text-color: #64748b;
+        --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     }
 
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
-    body{
-        overflow-x:hidden;
-        background:#f8fafc;
+    body {
+        overflow-x: hidden;
+        background: #f8fafc;
     }
 
-    /* HERO SECTION */
-    .hero-main-wrapper{
-        padding: 1rem 0 2rem;
+    /* ===== HERO SECTION ===== */
+    .hero-wrapper {
+        padding: 12px 0 24px;
     }
 
-    .lucknow-community-wrapper{
-        position:relative;
-        width:100%;
-        min-height:85vh;
-        border-radius:28px;
-        overflow:hidden;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    .hero-container {
+        position: relative;
+        width: 100%;
+        border-radius: 24px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .lucknow-community-image{
-        position:absolute;
-        width:100%;
-        height:100%;
-        object-fit:cover;
-        top:0;
-        left:0;
-        transform:scale(1.03);
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        width: 100%;
+        padding: 48px 20px;
     }
 
-    .lucknow-community-dark-layer{
-        position:absolute;
-        inset:0;
-        background:
-            linear-gradient(
-                to bottom right,
-                rgba(0,0,0,0.75),
-                rgba(0,0,0,0.45),
-                rgba(0,0,0,0.75)
-            );
-        z-index:1;
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        padding: 8px 16px;
+        border-radius: 60px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 20px;
     }
 
-    .lucknow-community-content{
-        position:relative;
-        z-index:2;
-        text-align:center;
-        color:white;
-        width:100%;
-        max-width:900px;
-        padding:2rem 1rem;
+    .hero-title {
+        font-size: 28px;
+        line-height: 1.25;
+        font-weight: 800;
+        margin-bottom: 12px;
     }
 
-    .lucknow-community-tag{
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        background:var(--glass-bg);
-        backdrop-filter:blur(10px);
-        border:1px solid rgba(255,255,255,0.2);
-        color:#fff;
-        padding:0.75rem 1.2rem;
-        border-radius:50px;
-        font-size:0.85rem;
-        font-weight:600;
-        margin-bottom:1.5rem;
+    .hero-text {
+        font-size: 14px;
+        line-height: 1.5;
+        max-width: 600px;
+        margin: 0 auto;
+        color: rgba(255, 255, 255, 0.9);
     }
 
-    .lucknow-community-title{
-        font-size:2.3rem;
-        line-height:1.15;
-        font-weight:800;
-        margin-bottom:1rem;
-        letter-spacing:-1px;
+    /* ===== SECTION HEADINGS ===== */
+    .section-heading {
+        text-align: center;
+        margin-bottom: 32px;
     }
 
-    .lucknow-community-text{
-        font-size:1rem;
-        line-height:1.8;
-        max-width:700px;
-        margin:auto;
-        color:rgba(255,255,255,0.9);
+    .section-heading h2 {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--dark-color);
+        margin-bottom: 8px;
     }
 
-    /* SERVICES SECTION */
-
-    .services-heading h3{
-        font-size:2rem;
-        font-weight:800;
-        color:var(--dark-color);
+    .section-heading p {
+        font-size: 13px;
+        color: var(--text-color);
     }
 
-    .services-heading p{
-        font-size:1rem;
-        color:var(--text-color);
-        margin-top:0.5rem;
+    /* ===== FEATURE CARDS ===== */
+    .feature-card {
+        background: white;
+        border-radius: 20px;
+        padding: 24px 20px;
+        height: 100%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--card-shadow);
+        border: 1px solid #eef2f6;
     }
 
-    .service-card{
-        position:relative;
-        background:#fff;
-        border-radius:28px;
-        overflow:hidden;
-        padding:2rem 1.5rem;
-        height:100%;
-        cursor:pointer;
-        transition:all 0.35s ease;
-        box-shadow:
-            0 10px 30px rgba(0,0,0,0.06);
-        border:1px solid rgba(0,0,0,0.04);
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--card-hover-shadow);
     }
 
-    .service-card:hover{
-        transform:translateY(-10px);
-        box-shadow:
-            0 20px 45px rgba(0,0,0,0.12);
+    .feature-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
     }
 
-    .service-icon{
-        width:85px;
-        height:85px;
-        margin:auto;
-        border-radius:22px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:2rem;
-        margin-bottom:1.4rem;
+    .icon-community {
+        background: #e8f0fe;
+        color: var(--primary-color);
     }
 
-    .community-icon{
-        background:rgba(37,99,235,0.12);
-        color:var(--primary-color);
+    .icon-radar {
+        background: #fff3e0;
+        color: var(--secondary-color);
     }
 
-    .radar-icon{
-        background:rgba(245,158,11,0.14);
-        color:var(--secondary-color);
+    .icon-tourism {
+        background: #e6f7ec;
+        color: var(--success-color);
     }
 
-    .service-card h4{
-        font-size:1.5rem;
-        font-weight:800;
-        margin-bottom:1rem;
-        color:var(--dark-color);
+    .feature-card h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--dark-color);
+        text-align: center;
     }
 
-    .service-card p{
-        color:var(--text-color);
-        line-height:1.8;
-        font-size:0.96rem;
-        margin-bottom:1.5rem;
+    .feature-card p {
+        color: var(--text-color);
+        line-height: 1.5;
+        font-size: 13px;
+        margin-bottom: 16px;
+        text-align: center;
     }
 
-    .service-btn{
-        border-radius:50px;
-        padding:0.85rem 1.7rem;
-        font-weight:700;
-        transition:0.3s ease;
+    .feature-badge {
+        display: inline-block;
+        font-size: 10px;
+        padding: 4px 10px;
+        border-radius: 30px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        text-align: center;
     }
 
-    .service-btn:hover{
-        transform:scale(1.03);
+    .badge-ai {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
     }
 
-    .ai-badge{
-        font-size:0.65rem !important;
-        padding:0.45rem 0.55rem;
-        border-radius:30px;
+    .badge-live {
+        background: #dc2626;
+        color: white;
     }
 
-    /* Floating Glow */
-    .service-card::before{
-        content:'';
-        position:absolute;
-        width:180px;
-        height:180px;
-        border-radius:50%;
-        background:rgba(37,99,235,0.06);
-        top:-60px;
-        right:-60px;
-        z-index:0;
+    .badge-new {
+        background: var(--success-color);
+        color: white;
     }
 
-    .service-card > *{
-        position:relative;
-        z-index:2;
+    .feature-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        justify-content: center;
+        margin-bottom: 16px;
     }
 
-    /* RESPONSIVE */
+    .feature-tag {
+        background: #f1f5f9;
+        padding: 4px 10px;
+        border-radius: 30px;
+        font-size: 10px;
+        color: var(--text-color);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
 
-    @media (min-width:576px){
-        .lucknow-community-title{
-            font-size:3rem;
+    .feature-btn {
+        width: 100%;
+        border-radius: 50px;
+        padding: 10px 16px;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .feature-btn-primary {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .feature-btn-warning {
+        background: var(--secondary-color);
+        color: white;
+    }
+
+    .feature-btn-success {
+        background: var(--success-color);
+        color: white;
+    }
+
+    .feature-btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+    }
+
+    /* ===== STATS SECTION ===== */
+    .stats-section {
+        background: white;
+        border-radius: 20px;
+        padding: 32px 16px;
+        margin: 32px 0;
+        box-shadow: var(--card-shadow);
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 12px;
+    }
+
+    .stat-number {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--dark-color);
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: var(--text-color);
+        font-weight: 500;
+    }
+
+    .stat-icon {
+        font-size: 24px;
+        color: var(--secondary-color);
+        margin-bottom: 8px;
+    }
+
+    /* ===== FEATURES LIST ===== */
+    .features-list {
+        background: white;
+        border-radius: 20px;
+        padding: 32px 20px;
+        margin: 32px 0;
+        box-shadow: var(--card-shadow);
+    }
+
+    .features-list h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+        color: var(--dark-color);
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding: 12px;
+        background: #f8fafc;
+        border-radius: 16px;
+    }
+
+    .feature-item-icon {
+        width: 44px;
+        height: 44px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .feature-item-text h4 {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: var(--dark-color);
+    }
+
+    .feature-item-text p {
+        font-size: 12px;
+        color: var(--text-color);
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color), #1e40af);
+        border-radius: 20px;
+        padding: 32px 24px;
+        text-align: center;
+        margin: 32px 0;
+    }
+
+    .cta-section h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .cta-section p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 20px;
+    }
+
+    .cta-btn {
+        background: white;
+        color: var(--primary-color);
+        border-radius: 50px;
+        padding: 10px 24px;
+        font-weight: 600;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ===== RESPONSIVE (ONLY PIXEL UNITS) ===== */
+    /* Mobile First - Default styles above work for 320px and up */
+    
+    /* Small phones (320px - 480px) */
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 24px;
         }
-
-        .lucknow-community-text{
-            font-size:1.05rem;
+        .hero-text {
+            font-size: 13px;
+        }
+        .feature-card {
+            padding: 20px 16px;
+        }
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            font-size: 24px;
+        }
+        .feature-card h3 {
+            font-size: 16px;
+        }
+        .stat-number {
+            font-size: 24px;
+        }
+    }
+    
+    /* Medium phones (481px - 768px) */
+    @media (min-width: 481px) and (max-width: 768px) {
+        .hero-title {
+            font-size: 32px;
+        }
+        .hero-text {
+            font-size: 14px;
+        }
+        .section-heading h2 {
+            font-size: 28px;
+        }
+    }
+    
+    /* Tablets (769px - 1024px) */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .hero-title {
+            font-size: 40px;
+        }
+        .hero-text {
+            font-size: 15px;
+        }
+        .section-heading h2 {
+            font-size: 32px;
+        }
+        .feature-card h3 {
+            font-size: 20px;
+        }
+    }
+    
+    /* Desktops (1025px and above) */
+    @media (min-width: 1025px) {
+        .hero-title {
+            font-size: 48px;
+        }
+        .hero-text {
+            font-size: 16px;
+        }
+        .section-heading h2 {
+            font-size: 36px;
+        }
+        .feature-card {
+            padding: 32px 24px;
+        }
+        .feature-card h3 {
+            font-size: 20px;
+        }
+        .stat-number {
+            font-size: 36px;
+        }
+    }
+    
+    /* Extra small devices (below 320px) */
+    @media (max-width: 320px) {
+        .hero-title {
+            font-size: 20px;
+        }
+        .hero-badge {
+            font-size: 10px;
+            padding: 6px 12px;
+        }
+        .feature-card {
+            padding: 16px 12px;
+        }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 20px;
+        }
+        .feature-card h3 {
+            font-size: 15px;
         }
     }
 
-    @media (min-width:768px){
-
-        .hero-main-wrapper{
-            padding:1.5rem 0 3rem;
-        }
-
-        .lucknow-community-wrapper{
-            min-height:88vh;
-        }
-
-        .lucknow-community-content{
-            padding:3rem;
-        }
-
-        .lucknow-community-title{
-            font-size:4rem;
-        }
-
-        .lucknow-community-text{
-            font-size:1.15rem;
-        }
-
-        .services-heading h3{
-            font-size:2.4rem;
+    /* Container padding responsive */
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    @media (min-width: 768px) {
+        .container {
+            padding-left: 16px;
+            padding-right: 16px;
         }
     }
-
-    @media (min-width:992px){
-
-        .lucknow-community-title{
-            font-size:5rem;
-        }
-
-        .lucknow-community-text{
-            font-size:1.2rem;
-        }
-
-        .service-card{
-            padding:2.5rem 2rem;
-        }
-    }
-
-    @media (max-width:575px){
-
-        .container{
-            padding-left:14px;
-            padding-right:14px;
-        }
-        
-
-        .lucknow-community-wrapper{
-            border-radius:22px;
-            min-height:50vh;
-        }
-
-        .service-card h4{
-            font-size:1.3rem;
-        }
-
-        .service-card{
-            border-radius:24px;
+    
+    @media (min-width: 1200px) {
+        .container {
+            padding-left: 20px;
+            padding-right: 20px;
         }
     }
 </style>
 
-<div class="container hero-main-wrapper">
-    <div class="lucknow-community-wrapper" data-aos="zoom-in" data-aos-duration="1200">
-
-        <img src="https://plus.unsplash.com/premium_photo-1697730430283-7e4456c78375?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-             alt="Lucknow Community"
-             class="lucknow-community-image">
-
-        <div class="lucknow-community-dark-layer"></div>
-
-        <div class="lucknow-community-content">
-
-            <div class="lucknow-community-tag" data-aos="fade-down">
-                <i class="fa-solid fa-location-dot"></i>
-                Explore Modern Lucknow
+<!-- HERO SECTION -->
+<div class="container hero-wrapper">
+    <div class="hero-container" data-aos="fade-up" data-aos-duration="800">
+        <div class="hero-content">
+            <div class="hero-badge" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-location-dot"></i>
+                Welcome to Upzunction
             </div>
-
-            <h1 class="lucknow-community-title"
-                data-aos="fade-up"
-                data-aos-delay="200">
-                The Upzunction <br>
-                Central Hub
+            <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">
+                Your Gateway to<br>
+                Smart Community Living
             </h1>
-
-            <p class="lucknow-community-text"
-               data-aos="fade-up"
-               data-aos-delay="400">
-                Discover local services, community posts, and every important requirement of the city in one beautiful platform.
+            <p class="hero-text" data-aos="fade-up" data-aos-delay="300">
+                Discover local services, explore tourist destinations, find community feasts, 
+                and connect with everything your city has to offer.
             </p>
-
         </div>
     </div>
 </div>
 
-<div class="container py-5">
-
-    <div class="row justify-content-center text-center mb-5">
-        <div class="col-lg-7 services-heading" data-aos="fade-up">
-            <h3>Explore Our Services</h3>
-            <p>
-                Choose a platform module below to get started and experience the smart city ecosystem.
-            </p>
-        </div>
+<!-- SERVICES SECTION -->
+<div class="container">
+    <div class="section-heading" data-aos="fade-up" data-aos-duration="600">
+        <h2>Explore Our Services</h2>
+        <p>Choose a platform module below to get started</p>
     </div>
 
-    <div class="row g-4 justify-content-center">
-
-       
-
-        <!-- RADAR CARD -->
-        <div class="col-12 col-md-6 col-lg-5"
-             data-aos="fade-up"
-             data-aos-delay="300">
-
-            <div class="service-card "
-                 onclick="location.href='/radar/'">
-
-                <div class="service-icon radar-icon">
-                    <i class="fa-solid fa-bowl-food"></i>
+    <div class="row g-3">
+        
+        <!-- TOURISM EXPLORER CARD -->
+        <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+            <div class="feature-card" onclick="location.href='/tourism/'">
+                <div class="feature-icon icon-tourism">
+                    <i class="fas fa-mountain"></i>
                 </div>
-
-                <h4>
-                    Live Bhandara Radar
-                    <span class="badge bg-danger ai-badge ms-1">
-                        AI
-                    </span>
-                </h4>
-
-                <p>
-                    Find nearby community feasts with smart GPS routing,
-                    live updates, and AI-based crowd prediction technology.
-                </p>
-
-                <a href="/radar/"
-                   class="btn btn-outline-warning text-dark service-btn ms-3">
-                    Open Radar
-                </a>
-
+                <div class="feature-badge badge-new">
+                    EXPLORE
+                </div>
+                <h3>Tourism Explorer</h3>
+                <p>Discover amazing destinations, find nearby attractions, and plan your next adventure.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag"><i class="fas fa-star"></i> Ratings</span>
+                    <span class="feature-tag"><i class="fas fa-map-marker-alt"></i> Nearby</span>
+                    <span class="feature-tag"><i class="fas fa-route"></i> Navigation</span>
+                </div>
+                <button class="feature-btn feature-btn-success">
+                    Explore <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
 
-         <!-- COMMUNITY CARD -->
-        <div class="col-12 col-md-6 col-lg-5"
-             data-aos="fade-up"
-             data-aos-delay="100">
-
-            <div class="service-card"
-                 onclick="location.href='/community/'">
-
-                <div class="service-icon community-icon">
-                    <i class="fa-solid fa-users"></i>
+        <!-- LIVE BHANDARA RADAR CARD -->
+        <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+            <div class="feature-card" onclick="location.href='/radar/'">
+                <div class="feature-icon icon-radar">
+                    <i class="fas fa-utensils"></i>
                 </div>
-
-                <h4>Community Board</h4>
-
-                <p>
-                    Post requirements, find jobs, explore education,
-                    discover opportunities, and connect with the local community easily.
-                </p>
-
-                <a href="/community/"
-                   class="btn btn-outline-primary service-btn">
-                    Enter Community
-                </a>
-
+                <div class="feature-badge badge-live">
+                    LIVE
+                </div>
+                <h3>Bhandara Radar</h3>
+                <p>Find nearby community feasts with smart GPS routing and real-time updates.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag"><i class="fas fa-location-crosshairs"></i> GPS</span>
+                    <span class="feature-tag"><i class="fas fa-chart-line"></i> Live Stats</span>
+                    <span class="feature-tag"><i class="fas fa-clock"></i> Real-time</span>
+                </div>
+                <button class="feature-btn feature-btn-warning">
+                    Open Radar <i class="fas fa-radar"></i>
+                </button>
             </div>
         </div>
 
+        <!-- COMMUNITY BOARD CARD -->
+        <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
+            <div class="feature-card" onclick="location.href='/community/'">
+                <div class="feature-icon icon-community">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="feature-badge badge-ai">
+                    CONNECT
+                </div>
+                <h3>Community Board</h3>
+                <p>Post requirements, find jobs, discover opportunities, and connect locally.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag"><i class="fas fa-newspaper"></i> Posts</span>
+                    <span class="feature-tag"><i class="fas fa-briefcase"></i> Jobs</span>
+                    <span class="feature-tag"><i class="fas fa-graduation-cap"></i> Education</span>
+                </div>
+                <button class="feature-btn feature-btn-primary">
+                    Join Now <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STATISTICS SECTION -->
+<div class="container">
+    <div class="stats-section" data-aos="fade-up" data-aos-duration="600">
+        <div class="row g-3">
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="stat-number" id="statSpots">50+</div>
+                    <div class="stat-label">Tourist Spots</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="stat-number" id="statBhandara">20+</div>
+                    <div class="stat-label">Active Bhandaras</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="statMembers">5K+</div>
+                    <div class="stat-label">Community Members</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <div class="stat-number" id="statCities">15+</div>
+                    <div class="stat-label">Cities Covered</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURES LIST SECTION -->
+<div class="container">
+    <div class="features-list" data-aos="fade-up" data-aos-duration="600">
+        <h3>Why Choose Upzunction?</h3>
+        <div class="row g-2">
+            <div class="col-12 col-md-6">
+                <div class="feature-item">
+                    <div class="feature-item-icon" style="color: var(--primary-color);">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="feature-item-text">
+                        <h4>Mobile First Design</h4>
+                        <p>Fully responsive experience across all devices</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="feature-item">
+                    <div class="feature-item-icon" style="color: var(--secondary-color);">
+                        <i class="fas fa-location-dot"></i>
+                    </div>
+                    <div class="feature-item-text">
+                        <h4>Real-time Location</h4>
+                        <p>GPS enabled services for accurate nearby results</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="feature-item">
+                    <div class="feature-item-icon" style="color: var(--success-color);">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="feature-item-text">
+                        <h4>AI-Powered Insights</h4>
+                        <p>Smart recommendations and crowd predictions</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="feature-item">
+                    <div class="feature-item-icon" style="color: #8b5cf6;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-item-text">
+                        <h4>Safe & Secure</h4>
+                        <p>Verified community and trusted information</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA SECTION -->
+<div class="container">
+    <div class="cta-section" data-aos="fade-up" data-aos-duration="600">
+        <h3>Ready to Explore?</h3>
+        <p>Join thousands of community members already using Upzunction</p>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'register_request' %}" class="cta-btn">
+            Get Started <i class="fas fa-arrow-right"></i>
+        </a>
+        {% else %}
+        <a href="/community/" class="cta-btn">
+            Go to Dashboard <i class="fas fa-arrow-right"></i>
+        </a>
+        {% endif %}
     </div>
 </div>
 
 <script>
-    // Optional smooth hover effect for touch + desktop
-    document.querySelectorAll('.service-card').forEach(card => {
+    // Counter animation for statistics
+    function animateCounter(elementId, targetValue, suffix = '') {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        const target = parseInt(targetValue);
+        let current = 0;
+        const steps = 40;
+        const increment = Math.ceil(target / steps);
+        let count = 0;
+        
+        const timer = setInterval(() => {
+            count++;
+            current += increment;
+            if (count >= steps || current >= target) {
+                element.innerText = targetValue + suffix;
+                clearInterval(timer);
+            } else {
+                element.innerText = current + '+' + suffix;
+            }
+        }, 25);
+    }
 
-        card.addEventListener('touchstart', () => {
-            card.style.transform = 'scale(0.98)';
+    // Animate stats when they come into view
+    const observerOptions = {
+        threshold: 0.3
+    };
+
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter('statSpots', '50', '+');
+                animateCounter('statBhandara', '20', '+');
+                animateCounter('statMembers', '5', 'K+');
+                animateCounter('statCities', '15', '+');
+                statsObserver.disconnect();
+            }
         });
+    }, observerOptions);
 
-        card.addEventListener('touchend', () => {
-            card.style.transform = 'scale(1)';
-        });
-
-    });
-
-    // Initialize AOS safely
-    if (typeof AOS !== "undefined") {
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+        statsObserver.observe(statsSection);
     }
 </script>
 

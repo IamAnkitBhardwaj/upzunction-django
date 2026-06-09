@@ -9,30 +9,7 @@
     .ai-tag { background: #e8f0fe; color: #1967d2; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
 </style>
 
-<div class="stats-container">
-    <div class="stat-box">
-        <div class="stat-label">Total Users</div>
-        <div class="stat-number">{{ dashboard_stats.total_users }}</div>
-    </div>
-    <div class="stat-box">
-        <div class="stat-label">Visits Today</div>
-        <div class="stat-number">{{ dashboard_stats.visits_today }}</div>
-    </div>
-    <div class="stat-box">
-        <div class="stat-label">Active Posts</div>
-        <div class="stat-number">{{ dashboard_stats.active_posts }}</div>
-    </div>
-    <div class="stat-box" style="border-top-color: #7b1fa2;">
-        <span class="ai-tag">AI PREDICTION</span>
-        <div class="stat-label">Next Week's Posts</div>
-        <div class="stat-number">~{{ dashboard_stats.predicted_new_posts }}</div>
-    </div>
-    <div class="stat-box" style="border-top-color: #7b1fa2;">
-        <span class="ai-tag">AI ANALYSIS</span>
-        <div class="stat-label">Market Status</div>
-        <div class="stat-number" style="font-size: 18px;">{{ dashboard_stats.market_status }}</div>
-    </div>
-</div>
+
 
 {{ block.super }}
 {% endblock %}

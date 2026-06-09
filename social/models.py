@@ -68,12 +68,12 @@ class Profile(models.Model):
     
 
 # --- NEW ANALYTICS MODEL ---
-class DailyVisit(models.Model):
-    date = models.DateField(auto_now_add=True, unique=True)
-    count = models.IntegerField(default=0)
+# class DailyVisit(models.Model):
+#     date = models.DateField(auto_now_add=True, unique=True)
+#     count = models.IntegerField(default=0)
 
-    def __str__(self):
-        return f"{self.date}: {self.count}"
+#     def __str__(self):
+#         return f"{self.date}: {self.count}"
 
 # This is a signal: it automatically creates a Profile whenever a new User is created.
 @receiver(post_save, sender=User)
