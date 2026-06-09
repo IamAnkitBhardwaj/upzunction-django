@@ -1,0 +1,659 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Tourist Place - {{ spot.name }}{% endblock %}
+
+{% block content %}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .form-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px 16px;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb-custom {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 24px;
+    }
+
+    .breadcrumb-custom a {
+        color: #667eea;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+    .breadcrumb-custom a:hover {
+        color: #764ba2;
+    }
+
+    .breadcrumb-custom .active {
+        color: #64748b;
+    }
+
+    /* Main Card */
+    .form-card {
+        background: white;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .form-card:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Card Header */
+    .card-header-custom {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        padding: 24px 32px;
+        color: white;
+    }
+
+    .card-header-custom h3 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-header-custom p {
+        margin: 8px 0 0 0;
+        font-size: 13px;
+        opacity: 0.9;
+    }
+
+    /* Card Body */
+    .card-body-custom {
+        padding: 32px;
+    }
+
+    /* Alert */
+    .alert-info-custom {
+        background: #eff6ff;
+        border-left: 4px solid #3b82f6;
+        border-radius: 16px;
+        padding: 16px 20px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .alert-info-custom i {
+        font-size: 20px;
+        color: #3b82f6;
+    }
+
+    .alert-info-custom span {
+        font-size: 13px;
+        color: #1e40af;
+        flex: 1;
+    }
+
+    .alert-warning-custom {
+        background: #fffbeb;
+        border-left: 4px solid #f59e0b;
+        border-radius: 16px;
+        padding: 16px 20px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .alert-warning-custom i {
+        font-size: 20px;
+        color: #f59e0b;
+    }
+
+    .alert-warning-custom span {
+        font-size: 13px;
+        color: #b45309;
+        flex: 1;
+    }
+
+    /* Form Styling */
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label-custom {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+
+    .form-label-custom i {
+        color: #3b82f6;
+        margin-right: 8px;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        transition: all 0.3s;
+        background: #fafcfc;
+    }
+
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        background: white;
+    }
+
+    textarea.form-control-custom {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    select.form-control-custom {
+        cursor: pointer;
+        appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+    }
+
+    /* Current Image Section */
+    .current-image-section {
+        background: #f8fafc;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .current-image-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .current-image {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .current-image img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 16px;
+        border: 2px solid #e2e8f0;
+    }
+
+    .current-image-info {
+        flex: 1;
+    }
+
+    .current-image-info p {
+        margin: 0;
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    /* File Input Styling */
+    .file-input-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .file-input-wrapper input[type="file"] {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .file-input-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .file-input-label:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+
+    .file-input-label i {
+        font-size: 20px;
+        color: #64748b;
+    }
+
+    .file-input-label span {
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    .image-preview {
+        margin-top: 16px;
+        display: none;
+    }
+
+    .image-preview img {
+        max-width: 200px;
+        max-height: 150px;
+        border-radius: 12px;
+        object-fit: cover;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #eef2f6;
+    }
+
+    .btn-update {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        border: none;
+        border-radius: 60px;
+        padding: 12px 28px;
+        font-weight: 600;
+        font-size: 14px;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+    .btn-update:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-cancel {
+        background: #f1f5f9;
+        border: none;
+        border-radius: 60px;
+        padding: 12px 28px;
+        font-weight: 600;
+        font-size: 14px;
+        color: #475569;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-cancel:hover {
+        background: #e2e8f0;
+        transform: translateY(-2px);
+        color: #1e293b;
+    }
+
+    /* Help Text */
+    .help-text {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .help-text i {
+        font-size: 10px;
+    }
+
+    /* Error Styling */
+    .errorlist {
+        list-style: none;
+        background: #fef2f2;
+        border-radius: 12px;
+        padding: 8px 12px;
+        margin-top: 8px;
+    }
+
+    .errorlist li {
+        font-size: 12px;
+        color: #dc2626;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 16px;
+        }
+
+        .card-header-custom {
+            padding: 20px 24px;
+        }
+
+        .card-header-custom h3 {
+            font-size: 20px;
+        }
+
+        .card-body-custom {
+            padding: 24px;
+        }
+
+        .current-image img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn-update, .btn-cancel {
+            justify-content: center;
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-header-custom {
+            padding: 16px 20px;
+        }
+
+        .card-body-custom {
+            padding: 20px;
+        }
+
+        .form-label-custom {
+            font-size: 13px;
+        }
+
+        .form-control-custom {
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+
+        .current-image {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .current-image img {
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-card {
+        animation: fadeInUp 0.5s ease-out;
+    }
+</style>
+
+<div class="form-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-custom" data-aos="fade-up">
+        <ol class="breadcrumb" style="background: transparent; padding: 0;">
+            <li class="breadcrumb-item">
+                <a href="{% url 'tourism:feed' %}">
+                    <i class="fas fa-home me-1"></i> Tourism
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#">{{ spot.city.name }}</a>
+            </li>
+            <li class="breadcrumb-item active">Edit {{ spot.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card" data-aos="fade-up" data-aos-delay="50">
+                <!-- Header -->
+                <div class="card-header-custom">
+                    <h3>
+                        <i class="fas fa-edit"></i>
+                        Edit Tourist Place
+                    </h3>
+                    <p>Update information for "{{ spot.name }}"</p>
+                </div>
+
+                <!-- Body -->
+                <div class="card-body-custom">
+                    <!-- Warning Alert -->
+                    <div class="alert-warning-custom">
+                        <i class="fas fa-clock"></i>
+                        <span>Changes will be reviewed by admin before appearing publicly.</span>
+                    </div>
+
+                    <form method="POST" enctype="multipart/form-data" id="editTouristForm">
+                        {% csrf_token %}
+
+                        <!-- Place Name -->
+                        <div class="form-group">
+                            <label class="form-label-custom">
+                                <i class="fas fa-tag"></i>
+                                Tourist Place Name
+                                <span class="required-star" style="color: #ef4444;">*</span>
+                            </label>
+                            <input type="text" name="name" id="id_name" class="form-control-custom" value="{{ spot.name }}" required>
+                            <div class="help-text">
+                                <i class="fas fa-info-circle"></i>
+                                The official name of this tourist destination
+                            </div>
+                        </div>
+
+                        <!-- City Selection -->
+                        <div class="form-group">
+                            <label class="form-label-custom">
+                                <i class="fas fa-city"></i>
+                                City
+                                <span class="required-star" style="color: #ef4444;">*</span>
+                            </label>
+                            <select name="city" id="id_city" class="form-control-custom" required>
+                                {% for city in cities %}
+                                <option value="{{ city.id }}" {% if city.id == spot.city.id %}selected{% endif %}>
+                                    {{ city.name }}, {{ city.state.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="help-text">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Select the city where this tourist place is located
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label class="form-label-custom">
+                                <i class="fas fa-align-left"></i>
+                                Description
+                                <span class="required-star" style="color: #ef4444;">*</span>
+                            </label>
+                            <textarea name="description" id="id_description" class="form-control-custom" rows="6" required>{{ spot.description }}</textarea>
+                            <div class="help-text">
+                                <i class="fas fa-info-circle"></i>
+                                Describe what makes this place special (min. 20 characters)
+                            </div>
+                        </div>
+
+                        <!-- Google Maps URL -->
+                        <div class="form-group">
+                            <label class="form-label-custom">
+                                <i class="fas fa-map-location-dot"></i>
+                                Google Maps URL
+                                <span class="required-star" style="color: #ef4444;">*</span>
+                            </label>
+                            <input type="url" name="google_maps_url" id="id_google_maps_url" class="form-control-custom" value="{{ spot.google_maps_url }}" required>
+                            <div class="help-text">
+                                <i class="fas fa-link"></i>
+                                Paste the Google Maps link for accurate navigation
+                            </div>
+                        </div>
+
+                        <!-- Current Image Display -->
+                        {% if spot.image %}
+                        <div class="current-image-section">
+                            <div class="current-image-title">
+                                <i class="fas fa-image"></i>
+                                Current Image
+                            </div>
+                            <div class="current-image">
+                                <img src="{{ spot.image.url }}" alt="{{ spot.name }}">
+                                <div class="current-image-info">
+                                    <p><i class="fas fa-check-circle" style="color: #10b981;"></i> Current image is displayed</p>
+                                    <p><i class="fas fa-cloud-upload-alt"></i> Upload a new image to replace it</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Image Upload -->
+                        <div class="form-group">
+                            <label class="form-label-custom">
+                                <i class="fas fa-camera"></i>
+                                {% if spot.image %}Change Image{% else %}Upload Image{% endif %}
+                            </label>
+                            <div class="file-input-wrapper">
+                                <div class="file-input-label" onclick="document.getElementById('id_image').click()">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>{% if spot.image %}Click to change image{% else %}Click to upload image{% endif %} (Recommended: 800x600px)</span>
+                                </div>
+                                <input type="file" name="image" id="id_image" accept="image/*">
+                            </div>
+                            <div class="help-text">
+                                <i class="fas fa-camera"></i>
+                                Upload a clear image of the tourist place (JPG, PNG). Leave empty to keep current image.
+                            </div>
+                            <div id="imagePreview" class="image-preview"></div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button type="submit" class="btn-update">
+                                <i class="fas fa-save"></i>
+                                Update Place
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="btn-cancel">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Card -->
+            <div class="form-card mt-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-header-custom" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <h5 style="margin: 0; font-size: 16px;">
+                        <i class="fas fa-lightbulb"></i>
+                        Editing Tips
+                    </h5>
+                </div>
+                <div class="card-body-custom" style="padding: 24px;">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 32px; height: 32px; background: #dbeafe; border-radius: 60px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-pen" style="color: #2563eb; font-size: 14px;"></i>
+                            </div>
+                            <div>
+                                <strong style="font-size: 13px;">Keep Information Accurate</strong>
+                                <p style="font-size: 12px; color: #64748b; margin: 0;">Ensure all details are up-to-date and correct</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 32px; height: 32px; background: #fef3c7; border-radius: 60px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="color: #d97706; font-size: 14px;"></i>
+                            </div>
+                            <div>
+                                <strong style="font-size: 13px;">Update Photos</strong>
+                                <p style="font-size: 12px; color: #64748b; margin: 0;">Add recent, high-quality images for better visibility</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 32px; height: 32px; background: #dcfce7; border-radius: 60px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-check-circle" style="color: #10b981; font-size: 14px;"></i>
+                            </div>
+                            <div>
+                                <strong style="font-size: 13px;">Review Before Saving</strong>
+                                <p style="font-size: 12px; color: #64748b; margin: 0;">Double-check all information before submitting updates</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Image preview functionality
+    document.getElementById('id_image').addEventListener('change', function(event) {
+        const preview = document.getElementById('imagePreview');
+        const file = event.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.innerHTML = '';
+            preview.style.display = 'none';
+        }
+    });
+
+    // Hide the default file input styling
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('id_image');
+        if (fileInput) {
+            fileInput.style.display = 'none';
+        }
+    });
+</script>
+
+{% endblock %}

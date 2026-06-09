@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.conf import settings # Import the settings module
 from django.http import HttpResponse
 import os
-
+from tourism.models import TouristSpot
 # Models and Forms
 from .models import Post, Location, Message, Profile
 from .forms import PostForm, UserRegisterForm, UserUpdateForm, ProfileUpdateForm
@@ -145,17 +145,39 @@ def create_post_view(request):
 
 @login_required
 def dashboard_view(request):
-    user_posts = Post.objects.filter(author=request.user).order_by('-created_at')
-    received_messages = Message.objects.filter(recipient=request.user).order_by('-sent_at')
-    sent_messages = Message.objects.filter(sender=request.user).order_by('-sent_at')
+
+    user_posts = Post.objects.filter(
+        author=request.user
+    ).order_by('-created_at')
+
+    received_messages = Message.objects.filter(
+        recipient=request.user
+    ).order_by('-sent_at')
+
+    sent_messages = Message.objects.filter(
+        sender=request.user
+    ).order_by('-sent_at')
+
+    my_tourist_spots = TouristSpot.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
 
     context = {
-        'user_posts': user_posts,
-        'received_messages': received_messages,
-        'sent_messages': sent_messages,
-    }
-    return render(request, 'social/dashboard.html', context)
 
+        'user_posts': user_posts,
+
+        'received_messages': received_messages,
+
+        'sent_messages': sent_messages,
+
+        'my_tourist_spots': my_tourist_spots,
+    }
+
+    return render(
+        request,
+        'social/dashboard.html',
+        context
+    )
 
 @login_required
 def deactivate_post_view(request, post_id):

@@ -42,6 +42,14 @@
     .title-section {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .title-left {
+        display: flex;
+        align-items: center;
         gap: 12px;
         flex-wrap: wrap;
     }
@@ -72,6 +80,27 @@
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
+    }
+    
+    .btn-add-spot {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        border-radius: 60px;
+        padding: 10px 20px;
+        font-weight: 600;
+        font-size: 13px;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+    
+    .btn-add-spot:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        color: white;
     }
     
     /* Filter Card */
@@ -166,6 +195,7 @@
         height: 210px;
         object-fit: cover;
         background: #d9e2ec;
+        cursor: pointer;
     }
     
     .card-body-custom {
@@ -178,15 +208,16 @@
         font-weight: 800;
         margin-bottom: 8px;
         color: #1f3b45;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
     }
     
-    .spot-title i {
+    .spot-title a {
+        color: #1f3b45;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    
+    .spot-title a:hover {
         color: #ff8c42;
-        font-size: 18px;
     }
     
     .location-text {
@@ -215,7 +246,26 @@
         font-size: 13px;
         font-weight: 700;
         color: #c96f1e;
+    }
+    
+    .views-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: #8ba0b0;
+    }
+    
+    .spot-description {
+        font-size: 12px;
+        color: #6c7e8e;
+        line-height: 1.5;
+        margin-top: 12px;
         margin-bottom: 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
     
     .distance-chip {
@@ -235,27 +285,54 @@
         background: transparent;
         border-top: 1px solid #ecf3f9;
         padding: 14px 18px 18px 18px;
+        display: flex;
+        gap: 10px;
     }
     
-    .btn-navigate {
+    .btn-detail {
         background: #1e466e;
         border: none;
         border-radius: 60px;
-        padding: 11px 0;
+        padding: 10px 0;
         font-weight: 600;
-        font-size: 13px;
+        font-size: 12px;
         color: white;
-        width: 100%;
+        flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 6px;
         transition: 0.2s;
+        text-decoration: none;
+    }
+    
+    .btn-detail:hover {
+        background: #0f3552;
+        transform: scale(0.98);
+        color: white;
+    }
+    
+    .btn-navigate {
+        background: #28a745;
+        border: none;
+        border-radius: 60px;
+        padding: 10px 0;
+        font-weight: 600;
+        font-size: 12px;
+        color: white;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: 0.2s;
+        text-decoration: none;
     }
     
     .btn-navigate:hover {
-        background: #0f3552;
+        background: #1e7e34;
         transform: scale(0.98);
+        color: white;
     }
     
     /* empty state */
@@ -295,6 +372,10 @@
         .btn-gradient-near {
             padding: 11px 8px;
         }
+        .card-footer-custom {
+            flex-direction: column;
+            gap: 8px;
+        }
     }
     
     @media (max-width: 576px) {
@@ -307,14 +388,10 @@
         .spot-title {
             font-size: 16px;
         }
-    }
-    
-    /* loading state (minimal) */
-    .loading-placeholder {
-        text-align: center;
-        padding: 48px;
-        background: white;
-        border-radius: 28px;
+        .title-section {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 </style>
 
@@ -324,12 +401,17 @@
         <!-- Header Section -->
         <div class="header-card" data-aos="fade-up" data-aos-duration="600">
             <div class="title-section">
-                <div class="title-icon">
-                    <i class="fas fa-globe-americas"></i>
+                <div class="title-left">
+                    <div class="title-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h2 class="title-text">
+                        Tourism <span>Explorer</span>
+                    </h2>
                 </div>
-                <h2 class="title-text">
-                    Tourism <span>Explorer</span>
-                </h2>
+                <a href="{% url 'tourism:add_spot' %}" class="btn-add-spot">
+                    <i class="fas fa-plus-circle"></i> Add Tourist Place
+                </a>
             </div>
             <p class="text-muted mt-2 mb-0" style="font-size: 13px; padding-left: 4px;">
                 <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i> Discover amazing destinations & hidden gems
@@ -368,25 +450,52 @@
             {% for spot in spots %}
             <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:50 }}">
                 <div class="tourism-card">
-                    {% if spot.image %}
-                    <img src="{{ spot.image.url }}" class="card-img-top-custom" alt="{{ spot.name }}">
-                    {% else %}
-                    <div class="card-img-top-custom d-flex align-items-center justify-content-center bg-light">
-                        <i class="fas fa-mountain-sun" style="font-size: 48px; color: #cbdae6;"></i>
-                    </div>
-                    {% endif %}
+                    <!-- Image with link to detail -->
+                    <a href="{% url 'tourism:spot_detail' spot.id %}">
+                        {% if spot.image %}
+                        <img src="{{ spot.image.url }}" class="card-img-top-custom" alt="{{ spot.name }}">
+                        {% else %}
+                        <div class="card-img-top-custom d-flex align-items-center justify-content-center bg-light">
+                            <i class="fas fa-mountain-sun" style="font-size: 48px; color: #cbdae6;"></i>
+                        </div>
+                        {% endif %}
+                    </a>
+                    
+                    <!-- Card Body -->
                     <div class="card-body-custom">
                         <div class="spot-title">
-                            <i class="fas fa-tree"></i> {{ spot.name }}
+                            <a href="{% url 'tourism:spot_detail' spot.id %}">{{ spot.name }}</a>
                         </div>
                         <div class="location-text">
-                            <i class="fas fa-location-dot"></i> {{ spot.city.name }}, {{ spot.city.state.name }}
+                            <i class="fas fa-location-dot"></i>
+                            {{ spot.city.name }}, {{ spot.city.state.name }}
                         </div>
-                        <div class="rating-badge">
-                            <i class="fas fa-star" style="color: #f4b942;"></i> {{ spot.rating }}
+                        
+                        <!-- Short Description -->
+                        {% if spot.description %}
+                        <div class="spot-description">
+                            {{ spot.description|truncatewords:20 }}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Rating + Views -->
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="rating-badge">
+                                <i class="fas fa-star" style="color: #f4b942;"></i>
+                                {{ spot.rating }}
+                            </span>
+                            <span class="views-count">
+                                <i class="fas fa-eye"></i>
+                                {{ spot.views }} views
+                            </span>
                         </div>
                     </div>
+                    
+                    <!-- Card Footer with Buttons -->
                     <div class="card-footer-custom">
+                        <a href="{% url 'tourism:spot_detail' spot.id %}" class="btn-detail">
+                            <i class="fas fa-book-open"></i> Read More
+                        </a>
                         <a href="{{ spot.google_maps_url }}" target="_blank" class="btn-navigate">
                             <i class="fas fa-compass"></i> Navigate
                         </a>
@@ -416,7 +525,7 @@
 </script>
 
 <script>
-    // -------------------- BACKEND INTEGRATION (UNCHANGED LOGIC) --------------------
+    // -------------------- BACKEND INTEGRATION --------------------
     const stateSelect = document.getElementById('stateSelect');
     const citySelect = document.getElementById('citySelect');
     
@@ -447,8 +556,6 @@
     citySelect.addEventListener('change', function() {
         const cityId = this.value;
         if (!cityId) {
-            // Optionally reload all spots? based on typical UX, we keep empty? but original just updates when city selected.
-            // To respect original: only fetch when city has value.
             return;
         }
         
@@ -456,7 +563,6 @@
             .then(response => response.json())
             .then(data => {
                 renderTourismCards(data.spots);
-                // refresh AOS for new dynamic elements
                 AOS.refresh();
             })
             .catch(err => console.error("Error loading spots:", err));
@@ -488,7 +594,7 @@
         );
     });
     
-    // Core rendering function (kept exactly same mapping but improved visual consistency with icons)
+    // Core rendering function for dynamic content
     function renderTourismCards(spots) {
         const container = document.getElementById('tourism-list');
         if (!container) return;
@@ -510,6 +616,10 @@
                 ? `<img src="${spot.image}" class="card-img-top-custom" alt="${spot.name}">`
                 : `<div class="card-img-top-custom d-flex align-items-center justify-content-center bg-light"><i class="fas fa-image" style="font-size: 48px; color: #cbdae6;"></i></div>`;
             
+            const descriptionHtml = spot.description 
+                ? `<div class="spot-description">${escapeHtml(spot.description).substring(0, 100)}${spot.description.length > 100 ? '...' : ''}</div>`
+                : '';
+            
             const distanceHtml = spot.distance 
                 ? `<div class="distance-chip"><i class="fas fa-car-side"></i> ${spot.distance} km away</div>`
                 : '';
@@ -517,20 +627,31 @@
             html += `
                 <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-delay="${(idx % 6) * 50}">
                     <div class="tourism-card">
-                        ${imageHtml}
+                        <a href="/tourism/spot/${spot.id}/">
+                            ${imageHtml}
+                        </a>
                         <div class="card-body-custom">
                             <div class="spot-title">
-                                <i class="fas fa-map-marked-alt"></i> ${escapeHtml(spot.name)}
+                                <a href="/tourism/spot/${spot.id}/">${escapeHtml(spot.name)}</a>
                             </div>
                             <div class="location-text">
                                 <i class="fas fa-location-dot"></i> ${escapeHtml(spot.city || '')}${spot.state ? ', ' + escapeHtml(spot.state) : ''}
                             </div>
-                            <div class="rating-badge">
-                                <i class="fas fa-star" style="color: #f4b942;"></i> ${spot.rating || 'N/A'}
+                            ${descriptionHtml}
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="rating-badge">
+                                    <i class="fas fa-star" style="color: #f4b942;"></i> ${spot.rating || 'N/A'}
+                                </span>
+                                <span class="views-count">
+                                    <i class="fas fa-eye"></i> ${spot.views || 0} views
+                                </span>
                             </div>
                             ${distanceHtml}
                         </div>
                         <div class="card-footer-custom">
+                            <a href="/tourism/spot/${spot.id}/" class="btn-detail">
+                                <i class="fas fa-book-open"></i> Read More
+                            </a>
                             <a href="${escapeHtml(spot.map_url || '#')}" target="_blank" class="btn-navigate">
                                 <i class="fas fa-compass"></i> Navigate
                             </a>
@@ -542,13 +663,12 @@
         
         container.innerHTML = html;
         
-        // Re-trigger AOS for new items (optional but ensures animations)
         if (typeof AOS !== 'undefined') {
             AOS.refresh();
         }
     }
     
-    // simple escape to prevent XSS (keeping original data safe)
+    // Escape HTML to prevent XSS
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -556,14 +676,8 @@
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
         });
     }
-    
-    // small enhancement: initial load if any city already pre-selected? no, but maintain consistency.
-    // Also ensure that if state initially has a value and city select gets pre-filled? Not needed, original doesn't.
-    // But we preserve identical backend behavior
 </script>
 
 {% endblock %}

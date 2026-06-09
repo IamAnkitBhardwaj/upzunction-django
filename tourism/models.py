@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from bhandara_radar.utils import extract_coordinates
-
+from django.contrib.auth.models import User
 
 class State(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -20,6 +20,7 @@ class City(models.Model):
         return f"{self.name}, {self.state.name}"
 
 class TouristSpot(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='tourist_spots')
     city = models.ForeignKey(City,on_delete=models.CASCADE,related_name='tourist_spots')
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True,null=True)
@@ -32,6 +33,7 @@ class TouristSpot(models.Model):
     views = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField( default=timezone.now)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
