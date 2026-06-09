@@ -6,6 +6,13 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from the .env file (for local development)
+load_dotenv()
+
 CLOUDINARY_STORAGE = {
 
     'CLOUD_NAME':
@@ -17,11 +24,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET':
         os.getenv('CLOUDINARY_API_SECRET'),
 }
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Load environment variables from the .env file (for local development)
-load_dotenv()
 
 # SECRET_KEY is read from an environment variable in production for security.
 SECRET_KEY = os.getenv('SECRET_KEY', 'a-default-secret-key-for-local-dev-only')
